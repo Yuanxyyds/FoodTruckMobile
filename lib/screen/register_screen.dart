@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:food_truck_mobile/screen/login.dart';
+import 'package:food_truck_mobile/screen/login_screen.dart';
 
-class RegisterPage extends StatelessWidget {
-  const RegisterPage({super.key});
+class RegisterScreen extends StatelessWidget {
+  const RegisterScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +53,7 @@ class RegisterPage extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context).pop();
                 Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => const LogInPage())
+                    MaterialPageRoute(builder: (context) => const LogInScreen())
                 );
               },
               child: const Text('Back'),
