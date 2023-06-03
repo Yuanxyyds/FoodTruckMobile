@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:food_truck_mobile/helper/auth.dart';
 import 'package:food_truck_mobile/icons/google_icon.dart';
 import 'package:food_truck_mobile/screen/account_screen_profile.dart';
 import 'package:food_truck_mobile/screen/register_screen.dart';
@@ -9,6 +10,8 @@ import 'package:food_truck_mobile/widget/text.dart';
 import '../helper/constants.dart';
 import '../widget/bottom_navigation.dart';
 import '../widget/button.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class AccountScreenLogin extends StatefulWidget {
   const AccountScreenLogin({Key? key}) : super(key: key);
@@ -18,7 +21,10 @@ class AccountScreenLogin extends StatefulWidget {
 }
 
 class _AccountScreenLoginState extends State<AccountScreenLogin> {
+  final TextEditingController _inputEmail = TextEditingController();
+  final TextEditingController _inputPassword = TextEditingController();
   bool _emailMode = true;
+  final Auth _auth = Auth();
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +49,13 @@ class _AccountScreenLoginState extends State<AccountScreenLogin> {
             ),
           ],
         ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            _auth.signOut();
+          },
+          child: Icon(Icons.add),
+        ),
+
         bottomNavigationBar: const BottomNavigation(
           currentIndex: 3,
         ),
@@ -106,11 +119,18 @@ class _AccountScreenLoginState extends State<AccountScreenLogin> {
               ),
               const SizedBox(height: 8),
               if (_emailMode)
-                const InputField(
-                    labelText: 'Email', prefixIcon: Icon(Icons.email)),
+                InputField(
+                  labelText: 'Email',
+                  prefixIcon: const Icon(Icons.email),
+                  controller: _inputEmail,
+                ),
               if (!_emailMode)
-                const InputField(
-                    labelText: 'Password', prefixIcon: Icon(Icons.password)),
+                InputField(
+                  labelText: 'Password',
+                  prefixIcon: const Icon(Icons.password),
+                  controller: _inputPassword,
+                  obscureText: true,
+                ),
               const SizedBox(height: 8),
               if (_emailMode)
                 Button(
@@ -119,7 +139,16 @@ class _AccountScreenLoginState extends State<AccountScreenLogin> {
                   takeLeastSpace: true,
                   onPressed: () {
                     setState(() {
-                      _emailMode = !_emailMode;
+                      if (_inputEmail.text.isEmpty) {
+                        Fluttertoast.showToast(
+                            msg: "Email Cannot be Empty!",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.CENTER,
+                            timeInSecForIosWeb: 1,
+                            fontSize: 16.0);
+                      } else {
+                        _emailMode = !_emailMode;
+                      }
                     });
                   },
                 ),
@@ -130,7 +159,39 @@ class _AccountScreenLoginState extends State<AccountScreenLogin> {
                   takeLeastSpace: true,
                   onPressed: () {
                     setState(() {
-                      _emailMode = !_emailMode;
+                      if (_inputPassword.text.isEmpty) {
+                        Fluttertoast.showToast(
+                            msg: "Password Cannot be Empty!",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.CENTER,
+                            timeInSecForIosWeb: 1,
+                            fontSize: 16.0);
+                      } else {
+                        _auth.signInWithEmailAndPassword(
+                            email: _inputEmail.text,
+                            password: _inputPassword.text);
+                        if (_auth.currentUser != null) {
+                          Fluttertoast.showToast(
+                              msg: "Login Successed!",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.CENTER,
+                              timeInSecForIosWeb: 1,
+                              fontSize: 16.0);
+                          _inputEmail.clear();
+                          _inputPassword.clear();
+                          _emailMode = !_emailMode;
+                        } else {
+                          Fluttertoast.showToast(
+                              msg: "Invalid Password/Account!",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.CENTER,
+                              timeInSecForIosWeb: 1,
+                              fontSize: 16.0);
+                          _inputEmail.clear();
+                          _inputPassword.clear();
+                          _emailMode = !_emailMode;
+                        }
+                      }
                     });
                   },
                 ),
