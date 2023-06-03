@@ -72,7 +72,7 @@ class _SearchScreenState extends State<SearchScreen> {
               focusNode: _textFieldFocusNode,
               labelText: 'Search for restaurant',
               prefixIcon: const Icon(Icons.search),
-              textEditingController: _searchController,
+              controller: _searchController,
               onChange: _search,
               onTap: () {
                 setState(() {

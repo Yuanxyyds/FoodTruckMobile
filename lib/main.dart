@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:food_truck_mobile/helper/theme.dart';
+import 'package:food_truck_mobile/screen/home_screen.dart';
 import 'package:food_truck_mobile/screen/login_screen.dart';
 
 Future main() async {
@@ -24,7 +25,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: FoodTruckThemeData.themeData,
-      home: const LogInScreen(),
+      home: const HomeScreen(),
     );
   }
 }
