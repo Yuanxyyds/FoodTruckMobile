@@ -15,6 +15,10 @@ class FoodTruckThemeData {
     appBarTheme: const AppBarTheme(
       color: Constants.backgroundColor,
     ),
+    dividerTheme: const DividerThemeData(
+      color: Constants.primaryColor,
+      thickness: 2,
+    ),
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
         foregroundColor: Constants.primaryColorLight,

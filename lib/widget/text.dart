@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 /// A template component for Text for this app
@@ -8,12 +10,14 @@ class _Text extends StatelessWidget {
     required this.style,
     required this.overflow,
     required this.padding,
+    required this.maxLine,
   });
 
   final String text;
   final TextStyle style;
   final TextOverflow overflow;
   final EdgeInsets padding;
+  final int maxLine;
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +27,7 @@ class _Text extends StatelessWidget {
         text,
         style: style,
         overflow: overflow,
+        maxLines: maxLine,
       ),
     );
   }
@@ -37,6 +42,7 @@ class TextDisplayLarge extends StatelessWidget {
     this.isBold = false,
     this.overflow = TextOverflow.ellipsis,
     this.padding = const EdgeInsets.all(4.0),
+    this.maxLine = 1
   });
 
   final String text;
@@ -44,6 +50,7 @@ class TextDisplayLarge extends StatelessWidget {
   final bool isBold;
   final TextOverflow overflow;
   final EdgeInsets padding;
+  final int maxLine;
 
   @override
   Widget build(BuildContext context) {
@@ -60,6 +67,7 @@ class TextDisplayLarge extends StatelessWidget {
       style: style.copyWith(color: color),
       overflow: overflow,
       padding: padding,
+      maxLine: maxLine,
     );
   }
 }
@@ -73,6 +81,7 @@ class TextDisplayMedium extends StatelessWidget {
     this.isBold = false,
     this.overflow = TextOverflow.ellipsis,
     this.padding = const EdgeInsets.all(4.0),
+    this.maxLine = 1,
   });
 
   final String text;
@@ -80,6 +89,7 @@ class TextDisplayMedium extends StatelessWidget {
   final bool isBold;
   final TextOverflow overflow;
   final EdgeInsets padding;
+  final int maxLine;
 
   @override
   Widget build(BuildContext context) {
@@ -94,6 +104,7 @@ class TextDisplayMedium extends StatelessWidget {
       style: style.copyWith(color: color),
       overflow: overflow,
       padding: padding,
+      maxLine: maxLine,
     );
   }
 }
@@ -107,6 +118,7 @@ class TextDisplaySmall extends StatelessWidget {
     this.isBold = false,
     this.overflow = TextOverflow.ellipsis,
     this.padding = const EdgeInsets.all(4.0),
+    this.maxLine = 1,
   });
 
   final String text;
@@ -114,6 +126,7 @@ class TextDisplaySmall extends StatelessWidget {
   final bool isBold;
   final TextOverflow overflow;
   final EdgeInsets padding;
+  final int maxLine;
 
   @override
   Widget build(BuildContext context) {
@@ -128,6 +141,7 @@ class TextDisplaySmall extends StatelessWidget {
       style: style.copyWith(color: color),
       overflow: overflow,
       padding: padding,
+      maxLine: maxLine,
     );
   }
 }
@@ -141,6 +155,7 @@ class TextHeadlineLarge extends StatelessWidget {
     this.isBold = false,
     this.overflow = TextOverflow.ellipsis,
     this.padding = const EdgeInsets.all(4.0),
+    this.maxLine = 1,
   });
 
   final String text;
@@ -148,6 +163,7 @@ class TextHeadlineLarge extends StatelessWidget {
   final bool isBold;
   final TextOverflow overflow;
   final EdgeInsets padding;
+  final int maxLine;
 
   @override
   Widget build(BuildContext context) {
@@ -164,6 +180,7 @@ class TextHeadlineLarge extends StatelessWidget {
       style: style.copyWith(color: color),
       overflow: overflow,
       padding: padding,
+      maxLine: maxLine,
     );
   }
 }
@@ -177,6 +194,7 @@ class TextHeadlineMedium extends StatelessWidget {
     this.isBold = false,
     this.overflow = TextOverflow.ellipsis,
     this.padding = const EdgeInsets.all(4.0),
+    this.maxLine = 1,
   });
 
   final String text;
@@ -184,6 +202,7 @@ class TextHeadlineMedium extends StatelessWidget {
   final bool isBold;
   final TextOverflow overflow;
   final EdgeInsets padding;
+  final int maxLine;
 
   @override
   Widget build(BuildContext context) {
@@ -200,6 +219,7 @@ class TextHeadlineMedium extends StatelessWidget {
       style: style.copyWith(color: color),
       overflow: overflow,
       padding: padding,
+      maxLine: maxLine,
     );
   }
 }
@@ -213,6 +233,7 @@ class TextHeadlineSmall extends StatelessWidget {
     this.isBold = false,
     this.overflow = TextOverflow.ellipsis,
     this.padding = const EdgeInsets.all(4.0),
+    this.maxLine = 1,
   });
 
   final String text;
@@ -220,6 +241,7 @@ class TextHeadlineSmall extends StatelessWidget {
   final bool isBold;
   final TextOverflow overflow;
   final EdgeInsets padding;
+  final int maxLine;
 
   @override
   Widget build(BuildContext context) {
@@ -235,6 +257,7 @@ class TextHeadlineSmall extends StatelessWidget {
       style: style.copyWith(color: color),
       overflow: overflow,
       padding: padding,
+      maxLine: maxLine,
     );
   }
 }
@@ -248,6 +271,7 @@ class TextTitleLarge extends StatelessWidget {
     this.isBold = false,
     this.overflow = TextOverflow.ellipsis,
     this.padding = const EdgeInsets.all(4.0),
+    this.maxLine = 1,
   });
 
   final String text;
@@ -255,6 +279,7 @@ class TextTitleLarge extends StatelessWidget {
   final bool isBold;
   final TextOverflow overflow;
   final EdgeInsets padding;
+  final int maxLine;
 
   @override
   Widget build(BuildContext context) {
@@ -269,6 +294,7 @@ class TextTitleLarge extends StatelessWidget {
       style: style.copyWith(color: color),
       overflow: overflow,
       padding: padding,
+      maxLine: maxLine,
     );
   }
 }
@@ -282,6 +308,7 @@ class TextTitleMedium extends StatelessWidget {
     this.isBold = false,
     this.overflow = TextOverflow.ellipsis,
     this.padding = const EdgeInsets.all(4.0),
+    this.maxLine = 1,
   });
 
   final String text;
@@ -289,6 +316,7 @@ class TextTitleMedium extends StatelessWidget {
   final bool isBold;
   final TextOverflow overflow;
   final EdgeInsets padding;
+  final int maxLine;
 
   @override
   Widget build(BuildContext context) {
@@ -303,6 +331,7 @@ class TextTitleMedium extends StatelessWidget {
       style: style.copyWith(color: color),
       overflow: overflow,
       padding: padding,
+      maxLine: maxLine,
     );
   }
 }
@@ -316,6 +345,7 @@ class TextTitleSmall extends StatelessWidget {
     this.isBold = false,
     this.overflow = TextOverflow.ellipsis,
     this.padding = const EdgeInsets.all(4.0),
+    this.maxLine = 1,
   });
 
   final String text;
@@ -323,6 +353,7 @@ class TextTitleSmall extends StatelessWidget {
   final bool isBold;
   final TextOverflow overflow;
   final EdgeInsets padding;
+  final int maxLine;
 
   @override
   Widget build(BuildContext context) {
@@ -337,6 +368,7 @@ class TextTitleSmall extends StatelessWidget {
       style: style.copyWith(color: color),
       overflow: overflow,
       padding: padding,
+      maxLine: maxLine,
     );
   }
 }
@@ -350,6 +382,7 @@ class TextLabelLarge extends StatelessWidget {
     this.isBold = false,
     this.overflow = TextOverflow.ellipsis,
     this.padding = const EdgeInsets.all(4.0),
+    this.maxLine = 1,
   });
 
   final String text;
@@ -357,6 +390,7 @@ class TextLabelLarge extends StatelessWidget {
   final bool isBold;
   final TextOverflow overflow;
   final EdgeInsets padding;
+  final int maxLine;
 
   @override
   Widget build(BuildContext context) {
@@ -371,6 +405,7 @@ class TextLabelLarge extends StatelessWidget {
       style: style.copyWith(color: color),
       overflow: overflow,
       padding: padding,
+      maxLine: maxLine,
     );
   }
 }
@@ -384,6 +419,7 @@ class TextLabelMedium extends StatelessWidget {
     this.isBold = false,
     this.overflow = TextOverflow.ellipsis,
     this.padding = const EdgeInsets.all(4.0),
+    this.maxLine = 1,
   });
 
   final String text;
@@ -391,6 +427,7 @@ class TextLabelMedium extends StatelessWidget {
   final bool isBold;
   final TextOverflow overflow;
   final EdgeInsets padding;
+  final int maxLine;
 
   @override
   Widget build(BuildContext context) {
@@ -405,6 +442,7 @@ class TextLabelMedium extends StatelessWidget {
       style: style.copyWith(color: color),
       overflow: overflow,
       padding: padding,
+      maxLine: maxLine,
     );
   }
 }
@@ -418,6 +456,7 @@ class TextLabelSmall extends StatelessWidget {
     this.isBold = false,
     this.overflow = TextOverflow.ellipsis,
     this.padding = const EdgeInsets.all(4.0),
+    this.maxLine = 1,
   });
 
   final String text;
@@ -425,6 +464,7 @@ class TextLabelSmall extends StatelessWidget {
   final bool isBold;
   final TextOverflow overflow;
   final EdgeInsets padding;
+  final int maxLine;
 
   @override
   Widget build(BuildContext context) {
@@ -439,6 +479,7 @@ class TextLabelSmall extends StatelessWidget {
       style: style.copyWith(color: color),
       overflow: overflow,
       padding: padding,
+      maxLine: maxLine,
     );
   }
 }
@@ -452,6 +493,7 @@ class TextBodyLarge extends StatelessWidget {
     this.isBold = false,
     this.overflow = TextOverflow.ellipsis,
     this.padding = const EdgeInsets.all(4.0),
+    this.maxLine = 1,
   });
 
   final String text;
@@ -459,6 +501,7 @@ class TextBodyLarge extends StatelessWidget {
   final bool isBold;
   final TextOverflow overflow;
   final EdgeInsets padding;
+  final int maxLine;
 
   @override
   Widget build(BuildContext context) {
@@ -473,6 +516,7 @@ class TextBodyLarge extends StatelessWidget {
       style: style.copyWith(color: color),
       overflow: overflow,
       padding: padding,
+      maxLine: maxLine,
     );
   }
 }
@@ -486,6 +530,7 @@ class TextBodyMedium extends StatelessWidget {
     this.isBold = false,
     this.overflow = TextOverflow.ellipsis,
     this.padding = const EdgeInsets.all(4.0),
+    this.maxLine = 1,
   });
 
   final String text;
@@ -493,6 +538,7 @@ class TextBodyMedium extends StatelessWidget {
   final bool isBold;
   final TextOverflow overflow;
   final EdgeInsets padding;
+  final int maxLine;
 
   @override
   Widget build(BuildContext context) {
@@ -507,6 +553,7 @@ class TextBodyMedium extends StatelessWidget {
       style: style.copyWith(color: color),
       overflow: overflow,
       padding: padding,
+      maxLine: maxLine,
     );
   }
 }
@@ -520,6 +567,7 @@ class TextBodySmall extends StatelessWidget {
     this.isBold = false,
     this.overflow = TextOverflow.ellipsis,
     this.padding = const EdgeInsets.all(4.0),
+    this.maxLine = 1,
   });
 
   final String text;
@@ -527,6 +575,7 @@ class TextBodySmall extends StatelessWidget {
   final bool isBold;
   final TextOverflow overflow;
   final EdgeInsets padding;
+  final int maxLine;
 
   @override
   Widget build(BuildContext context) {
@@ -541,6 +590,7 @@ class TextBodySmall extends StatelessWidget {
       style: style.copyWith(color: color),
       overflow: overflow,
       padding: padding,
+      maxLine: maxLine,
     );
   }
 }

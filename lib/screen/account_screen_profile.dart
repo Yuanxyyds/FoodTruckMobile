@@ -1,17 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:food_truck_mobile/screen/account_screen_login.dart';
 import 'package:food_truck_mobile/widget/bottom_navigation.dart';
 
-class AccountScreen extends StatelessWidget {
-  const AccountScreen({super.key});
-
+class AccountScreenProfile extends StatelessWidget {
+  const AccountScreenProfile({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('User Information'),
+        actions: [
+          Switch(
+            value: false,
+            onChanged: (bool newValue) {
+              Navigator.of(context).pop();
+              Navigator.of(context).push(
+                PageRouteBuilder(
+                  pageBuilder: (context, animation, secondaryAnimation) =>
+                      const AccountScreenLogin(),
+                  transitionDuration: Duration.zero,
+                ),
+              );
+            },
+          ),
+        ],
       ),
-      bottomNavigationBar: const BottomNavigation(currentIndex: 3,),
+      bottomNavigationBar: const BottomNavigation(
+        currentIndex: 3,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -36,14 +53,16 @@ class AccountScreen extends StatelessWidget {
             const SizedBox(height: 16.0),
             ListTile(
               leading: const Icon(Icons.phone),
-              title: const Text('123-456-7890'), // Replace with the user's phone number
+              title: const Text('123-456-7890'),
+              // Replace with the user's phone number
               onTap: () {
                 // Handle phone number tap
               },
             ),
             ListTile(
               leading: const Icon(Icons.location_on),
-              title: const Text('New York, USA'), // Replace with the user's location
+              title: const Text('New York, USA'),
+              // Replace with the user's location
               onTap: () {
                 // Handle location tap
               },

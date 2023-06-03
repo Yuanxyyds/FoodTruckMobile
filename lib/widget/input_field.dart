@@ -7,17 +7,23 @@ class InputField extends StatelessWidget {
       {super.key,
       required this.labelText,
       required this.prefixIcon,
-      this.textEditingController});
+      this.textEditingController,
+      this.onChange,
+      this.onTap,
+      this.focusNode});
 
   final String labelText;
   final Widget prefixIcon;
   final TextEditingController? textEditingController;
+  final ValueSetter<String>? onChange;
+  final VoidCallback? onTap;
+  final FocusNode? focusNode;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(
-        boxShadow:  [
+        boxShadow: [
           BoxShadow(
             color: Constants.whiteColor, // Shadow color
             spreadRadius: 2, // Spread radius
@@ -25,9 +31,12 @@ class InputField extends StatelessWidget {
             offset: Offset(0, 0), // Offset in x and y direction
           ),
         ],
-
       ),
       child: TextField(
+        onTap: onTap,
+        onChanged: onChange,
+        focusNode: focusNode,
+        controller: textEditingController,
         decoration: InputDecoration(
           labelText: labelText,
           prefixIcon: prefixIcon,

@@ -1,20 +1,28 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:food_truck_mobile/widget/menu_food.dart';
+import 'package:food_truck_mobile/widget/section_divider.dart';
+import 'package:food_truck_mobile/widget/section_header_in_between.dart';
+import 'package:food_truck_mobile/widget/text.dart';
 
 class RestaurantMenuScreen extends StatelessWidget {
   final String restaurantName;
-  final String restaurantIcon;
+  final String? restaurantIconUrl;
   final String restaurantDescription;
   final double restaurantRating;
-  final List<String> foodItems;
+  final List<String>? foodItems;
+  final List<String>? sections;
 
   const RestaurantMenuScreen({
-    Key? key,
+    super.key,
     required this.restaurantName,
-    required this.restaurantIcon,
     required this.restaurantDescription,
     required this.restaurantRating,
-    required this.foodItems,
-  }) : super(key: key);
+    this.restaurantIconUrl,
+    this.foodItems,
+    this.sections = const ['Uncategorized'],
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -22,64 +30,36 @@ class RestaurantMenuScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Menu'),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+      body: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+        child: ListView(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Row(
-                children: [
-                  Image.network(
-                    restaurantIcon,
-                    width: 48,
-                    height: 48,
+            Container(
+              height: 185,
+              decoration: BoxDecoration(
+                color: Colors.transparent,
+                borderRadius: BorderRadius.circular(8),
+                image: const DecorationImage(
+                  image: AssetImage(
+                    'images/DefaultRestaurantImage.jpeg',
                   ),
-                  const SizedBox(width: 8),
-                  Text(
-                    restaurantName,
-                    style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                  ),
-                ],
+                  fit: BoxFit.fill,
+                ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Text(
-                restaurantDescription,
-                style: const TextStyle(fontSize: 18),
-              ),
+            TextTitleLarge(
+              text: restaurantName,
+              isBold: true,
+              padding: const EdgeInsets.symmetric(vertical: 15),
             ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Row(
-                children: [
-                  const Icon(Icons.star, color: Colors.yellow),
-                  const SizedBox(width: 8),
-                  Text(
-                    restaurantRating.toStringAsFixed(1),
-                    style: const TextStyle(fontSize: 18),
-                  ),
-                ],
-              ),
+
+            TextTitleSmall(
+              text: restaurantDescription,
+              padding: EdgeInsets.zero,
             ),
-            ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: foodItems.length,
-              itemBuilder: (context, index) {
-                final foodItem = foodItems[index];
-                return ListTile(
-                  title: Text(foodItem),
-                  trailing: ElevatedButton(
-                    onPressed: () {
-                      // Add to cart functionality
-                    },
-                    child: const Text('Add to Cart'),
-                  ),
-                );
-              },
-            ),
+
+            const SectionHeaderInBetween(text: 'Uncategorized'),
+            ..._getContent(),
             const SizedBox(height: 16),
             Align(
               alignment: Alignment.center,
@@ -94,5 +74,19 @@ class RestaurantMenuScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  List<Widget> _getContent() {
+    List<Widget> content = [];
+    foodItems?.forEach((element) {
+      content.add(MenuFood(
+          foodName: element,
+          description:
+              'This is my food, it contains this, that and those and this is a very long string hihihihihihihi',
+          price: 0.99));
+      content.add(const SectionDivider());
+    });
+
+    return content;
   }
 }

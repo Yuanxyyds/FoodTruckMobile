@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:food_truck_mobile/icons/google_icon.dart';
+import 'package:food_truck_mobile/screen/account_screen_profile.dart';
 import 'package:food_truck_mobile/screen/register_screen.dart';
 import 'package:food_truck_mobile/widget/clickable_label.dart';
 import 'package:food_truck_mobile/widget/input_field.dart';
@@ -9,14 +10,14 @@ import '../helper/constants.dart';
 import '../widget/bottom_navigation.dart';
 import '../widget/button.dart';
 
-class MainLoginScreen extends StatefulWidget {
-  const MainLoginScreen({Key? key}) : super(key: key);
+class AccountScreenLogin extends StatefulWidget {
+  const AccountScreenLogin({Key? key}) : super(key: key);
 
   @override
-  State<MainLoginScreen> createState() => _MainLoginScreenState();
+  State<AccountScreenLogin> createState() => _AccountScreenLoginState();
 }
 
-class _MainLoginScreenState extends State<MainLoginScreen> {
+class _AccountScreenLoginState extends State<AccountScreenLogin> {
   bool _emailMode = true;
 
   @override
@@ -26,12 +27,27 @@ class _MainLoginScreenState extends State<MainLoginScreen> {
           title: const TextHeadlineSmall(
             text: 'My Account',
           ),
+          actions: [
+            Switch(
+              value: true,
+              onChanged: (bool newValue) {
+                Navigator.of(context).pop();
+                Navigator.of(context).push(
+                  PageRouteBuilder(
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                        const AccountScreenProfile(),
+                    transitionDuration: Duration.zero,
+                  ),
+                );
+              },
+            ),
+          ],
         ),
         bottomNavigationBar: const BottomNavigation(
-          currentIndex: 2,
+          currentIndex: 3,
         ),
         body: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
           child: ListView(
             children: [
               const Center(

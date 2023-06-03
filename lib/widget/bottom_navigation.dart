@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:food_truck_mobile/screen/account_screen.dart';
+import 'package:food_truck_mobile/screen/account_screen_profile.dart';
 import 'package:food_truck_mobile/screen/home_screen.dart';
 import 'package:food_truck_mobile/screen/order_history_screen.dart';
-import 'package:food_truck_mobile/screen/main_login_screen.dart';
+import 'package:food_truck_mobile/screen/account_screen_login.dart';
+import 'package:food_truck_mobile/screen/placeholder_screen.dart';
+import 'package:food_truck_mobile/screen/search_screen.dart';
 
 class BottomNavigation extends StatelessWidget {
   final int currentIndex;
@@ -36,13 +38,13 @@ class BottomNavigation extends StatelessWidget {
               screen = const HomeScreen();
               break;
             case 1:
-              screen = const MainLoginScreen();
+              screen = SearchScreen();
               break;
             case 2:
               screen = const OrderHistoryScreen();
               break;
             case 3:
-              screen = const AccountScreen();
+              screen = const AccountScreenLogin();
               break;
           }
           Navigator.of(context).pop();
