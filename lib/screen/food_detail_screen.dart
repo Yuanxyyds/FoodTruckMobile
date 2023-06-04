@@ -44,156 +44,165 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
     Color removeColor = count == 1 ? Colors.grey : Colors.black;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.foodName),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
-        child: ListView(
-          children: [
-            Container(
-              height: 185,
-              decoration: BoxDecoration(
-                color: Colors.transparent,
-                borderRadius: BorderRadius.circular(8),
-                image: DecorationImage(
-                  image: AssetImage(url),
-                  fit: BoxFit.fill,
+        appBar: AppBar(
+          title: Text(widget.foodName),
+        ),
+        body: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 15.0),
+          child: ListView(
+            children: [
+              Container(
+                height: 185,
+                decoration: BoxDecoration(
+                  color: Colors.transparent,
+                  borderRadius: BorderRadius.circular(8),
+                  image: DecorationImage(
+                    image: AssetImage(url),
+                    fit: BoxFit.fill,
+                  ),
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10.0),
-              child: Row(
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextTitleLarge(
+                        text: widget.foodName,
+                        isBold: true,
+                      ),
+                    ),
+                    if (widget.isPopular) const PopularTag()
+                  ],
+                ),
+              ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
-                    child: TextTitleLarge(
-                      text: widget.foodName,
+                    flex: 7,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 4.0),
+                      child: Text(
+                        widget.description,
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 3,
+                    child: Align(
+                        alignment: Alignment.topRight,
+                        child: TextTitleMedium(
+                          text: '\$ ${widget.price.toStringAsFixed(2)}',
+                          isBold: true,
+                          padding: EdgeInsets.zero,
+                        )),
+                  ),
+                ],
+              ),
+              const SectionDivider(),
+              const TextTitleMedium(
+                text: "Toppings",
+                isBold: true,
+              ),
+              const Padding(
+                padding: EdgeInsets.only(left: 4.0, top: 8.0, bottom: 8.0),
+                child: Text("Choose up to 4 additional items."),
+              ),
+              const Placeholder(
+                fallbackHeight: 800.0,
+              ),
+              const SectionDivider(),
+            ],
+          ),
+        ),
+
+        // Subtotal information fixed at bottom
+        bottomSheet: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 15.0),
+          child: SizedBox(
+            height: 100.0,
+            child: ListView(children: [
+              Row(
+                children: [
+                  const Expanded(
+                    child: TextTitleMedium(
+                      text: "Subtotal",
                       isBold: true,
                     ),
                   ),
-                  if (widget.isPopular) const PopularTag()
+                  TextTitleMedium(
+                    text: '\$ ${subtotal.toStringAsFixed(2)}',
+                    isBold: true,
+                  )
                 ],
               ),
-            ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  flex: 7,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 4.0),
-                    child: Text(
-                      widget.description,
-                    ),
-                  ),
-                ),
-                Expanded(
-                  flex: 3,
-                  child: Align(
-                      alignment: Alignment.topRight,
-                      child: TextTitleMedium(
-                        text: '\$ ${widget.price.toStringAsFixed(2)}',
-                        isBold: true,
-                        padding: EdgeInsets.zero,
-                      )),
-                ),
-              ],
-            ),
-            const SectionDivider(),
-            const TextTitleMedium(
-              text: "Toppings",
-              isBold: true,
-            ),
-            const Padding(
-              padding: EdgeInsets.only(left: 4.0, top: 8.0, bottom: 8.0),
-              child: Text("Choose up to 4 additional items."),
-            ),
-            const Placeholder(
-              fallbackHeight: 200.0,
-            ),
-            const SectionDivider(),
-            Row(
-              children: [
-                const Expanded(
-                  child: TextTitleMedium(
-                    text: "Subtotal",
-                    isBold: true,
-                  ),
-                ),
-                TextTitleMedium(
-                  text: '\$ ${subtotal.toStringAsFixed(2)}',
-                  isBold: true,
-                )
-              ],
-            ),
-            const SizedBox(
-              height: 8.0,
-            ),
-            Row(
-              children: [
-                Expanded(
-                    flex: 4,
-                    child: Container(
-                      height: 50.0,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                count = count > 1 ? count - 1 : 1;
-                              });
-                            },
-                            child: Icon(
-                              Icons.remove,
-                              color: removeColor,
-                            ),
-                          ),
-                          Text(
-                            count.toString(),
-                            style: const TextStyle(fontSize: 20),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                count += 1;
-                              });
-                            },
-                            child: const Icon(Icons.add),
-                          ),
-                        ],
-                      ),
-                    )),
-                const SizedBox(
-                  width: 10.0,
-                ),
-                Expanded(
-                  flex: 6,
-                  child: Container(
-                      height: 50.0,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8.0),
-                          color: Constants.primaryColor),
-                      child: const Center(
-                        child: TextTitleMedium(
-                          text: "Add to Order",
+              const SizedBox(
+                height: 8.0,
+              ),
+              Row(
+                children: [
+                  Expanded(
+                      flex: 4,
+                      child: Container(
+                        height: 50.0,
+                        decoration: BoxDecoration(
                           color: Colors.white,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  count = count > 1 ? count - 1 : 1;
+                                });
+                              },
+                              child: Icon(
+                                Icons.remove,
+                                color: removeColor,
+                              ),
+                            ),
+                            Text(
+                              count.toString(),
+                              style: const TextStyle(fontSize: 20),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  count += 1;
+                                });
+                              },
+                              child: const Icon(Icons.add),
+                            ),
+                          ],
                         ),
                       )),
-                )
-              ],
-            ),
-            const SizedBox(
-              height: 10.0,
-            )
-          ],
-        ),
-      ),
-    );
+                  const SizedBox(
+                    width: 10.0,
+                  ),
+                  Expanded(
+                    flex: 6,
+                    child: Container(
+                        height: 50.0,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8.0),
+                            color: Constants.primaryColor),
+                        child: const Center(
+                          child: TextTitleMedium(
+                            text: "Add to Order",
+                            color: Colors.white,
+                          ),
+                        )),
+                  )
+                ],
+              ),
+              const SizedBox(
+                height: 10.0,
+              )
+            ]),
+          ),
+        ));
   }
 }
