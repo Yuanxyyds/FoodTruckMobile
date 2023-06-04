@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:food_truck_mobile/widget/addition_food.dart';
 import 'package:food_truck_mobile/widget/text.dart';
 
 import '../helper/constants.dart';
@@ -11,15 +12,21 @@ class FoodDetailScreen extends StatefulWidget {
   final String description;
   final double price;
   final bool isPopular;
+  final List<List> toppings;
 
-  const FoodDetailScreen({
-    Key? key,
-    required this.imageUrl,
-    required this.foodName,
-    required this.description,
-    required this.price,
-    required this.isPopular,
-  }) : super(key: key);
+  const FoodDetailScreen(
+      {Key? key,
+      required this.imageUrl,
+      required this.foodName,
+      required this.description,
+      required this.price,
+      required this.isPopular,
+      this.toppings = const [
+        ["Avocado", 0.99],
+        ["Chili peppers", 0.99],
+        ["Vegan mayo", 0.99]
+      ]})
+      : super(key: key);
 
   @override
   State<FoodDetailScreen> createState() => _FoodDetailScreenState();
@@ -109,10 +116,7 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                 padding: EdgeInsets.only(left: 4.0, top: 8.0, bottom: 8.0),
                 child: Text("Choose up to 4 additional items."),
               ),
-              const Placeholder(
-                fallbackHeight: 800.0,
-              ),
-              const SectionDivider(),
+              ..._getContent(),
             ],
           ),
         ),
@@ -204,5 +208,14 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
             ]),
           ),
         ));
+  }
+
+  List<Widget> _getContent() {
+    List<Widget> content = [];
+    for (var element in widget.toppings) {
+      content.add(AdditionFood(name: element[0], price: element[1]));
+    }
+
+    return content;
   }
 }
