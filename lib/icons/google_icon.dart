@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 
+/// Define Google [IconData]
 class GoogleIcon {
   GoogleIcon._();
 

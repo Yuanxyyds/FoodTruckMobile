@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:food_truck_mobile/screen/login_screen.dart';
 import 'package:provider/provider.dart';
+import '../firebase/auth.dart';
 
-import '../helper/auth.dart';
-
+/// TODO: [RegisterScreen] UI not implemented yet.
+/// The [RegisterScreen] that allows user to register a new account
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
 
@@ -71,14 +71,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 _emailController.clear();
               },
               child: const Text('Register'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const LogInScreen()));
-              },
-              child: const Text('Back'),
             ),
           ],
         ),

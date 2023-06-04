@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 
+/// This Class contains a Underlined Clickable Text Label
 class ClickableLabel extends StatelessWidget {
   final String text;
   final VoidCallback? onTap;
+  final Color? color;
 
   const ClickableLabel({
     super.key,
     required this.text,
     this.onTap,
+    this.color,
   });
 
   @override
@@ -15,7 +18,7 @@ class ClickableLabel extends StatelessWidget {
 
     TextStyle defaultTextStyle = TextStyle(
       decoration: TextDecoration.underline,
-      color: Theme.of(context).primaryColor,
+      color: color ?? Theme.of(context).primaryColor,
     );
 
     return GestureDetector(
