@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// This Class contains a Underlined Clickable Text Label
 class ClickableLabel extends StatelessWidget {
   final String text;
   final VoidCallback? onTap;

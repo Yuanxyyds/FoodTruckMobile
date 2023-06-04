@@ -1,27 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:food_truck_mobile/helper/auth.dart';
+import 'package:food_truck_mobile/firebase/auth.dart';
 import 'package:food_truck_mobile/icons/google_icon.dart';
-import 'package:food_truck_mobile/screen/account_screen_profile.dart';
+import 'package:food_truck_mobile/models/user_model.dart';
 import 'package:food_truck_mobile/screen/register_screen.dart';
 import 'package:food_truck_mobile/widget/clickable_label.dart';
 import 'package:food_truck_mobile/widget/input_field.dart';
-import 'package:food_truck_mobile/widget/section_header_single_line.dart';
+import 'package:food_truck_mobile/widget/section_header_lr.dart';
 import 'package:food_truck_mobile/widget/text.dart';
 import 'package:provider/provider.dart';
 import '../helper/constants.dart';
 import '../widget/bottom_navigation.dart';
 import '../widget/button.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
-class AccountScreenLogin extends StatefulWidget {
-  const AccountScreenLogin({Key? key}) : super(key: key);
+/// The [AccountScreen] of this app, it has two screens: User Information
+/// Screen and the User Login Screen.
+
+class AccountScreen extends StatefulWidget {
+  const AccountScreen({Key? key}) : super(key: key);
 
   @override
-  State<AccountScreenLogin> createState() => _AccountScreenLoginState();
+  State<AccountScreen> createState() => _AccountScreenState();
 }
 
-class _AccountScreenLoginState extends State<AccountScreenLogin> {
+class _AccountScreenState extends State<AccountScreen> {
   final TextEditingController _inputEmail = TextEditingController();
   final TextEditingController _inputPassword = TextEditingController();
   bool _emailMode = true;
@@ -33,6 +35,7 @@ class _AccountScreenLoginState extends State<AccountScreenLogin> {
     super.dispose();
   }
 
+  /// Build the page based on if currentUser has an instance
   @override
   Widget build(BuildContext context) {
     Auth auth = context.watch<Auth>();
@@ -41,6 +44,7 @@ class _AccountScreenLoginState extends State<AccountScreenLogin> {
         : getAccountProfile(auth);
   }
 
+  /// Login State, Current Only Email/Password is supported
   Widget getLoginContent(Auth auth) {
     return Scaffold(
         appBar: AppBar(
@@ -106,23 +110,18 @@ class _AccountScreenLoginState extends State<AccountScreenLogin> {
                 onPressed: () {},
               ),
               const SizedBox(height: 16),
-              const SectionHeaderSingleLine(
+              const SectionHeaderLR(
                 text: 'or log in using email',
               ),
               const SizedBox(height: 8),
-              if (_emailMode)
-                InputField(
-                  labelText: 'Email',
-                  prefixIcon: const Icon(Icons.email),
-                  controller: _inputEmail,
-                ),
-              if (!_emailMode)
-                InputField(
-                  labelText: 'Password',
-                  prefixIcon: const Icon(Icons.password),
-                  controller: _inputPassword,
-                  obscureText: true,
-                ),
+              InputField(
+                labelText: _emailMode ? 'Email' : 'Password',
+                obscureText: _emailMode ? false : true,
+                prefixIcon: _emailMode
+                    ? const Icon(Icons.email)
+                    : const Icon(Icons.password),
+                controller: _emailMode ? _inputEmail : _inputPassword,
+              ),
               const SizedBox(height: 8),
               if (_emailMode)
                 Button(
@@ -131,14 +130,7 @@ class _AccountScreenLoginState extends State<AccountScreenLogin> {
                   takeLeastSpace: true,
                   onPressed: () {
                     setState(() {
-                      if (_inputEmail.text.isEmpty) {
-                        Fluttertoast.showToast(
-                            msg: "Email Cannot be Empty!",
-                            toastLength: Toast.LENGTH_SHORT,
-                            gravity: ToastGravity.CENTER,
-                            timeInSecForIosWeb: 1,
-                            fontSize: 16.0);
-                      } else {
+                      if (!_checkFieldIsEmpty(_inputEmail)) {
                         _emailMode = !_emailMode;
                       }
                     });
@@ -151,21 +143,13 @@ class _AccountScreenLoginState extends State<AccountScreenLogin> {
                   takeLeastSpace: true,
                   onPressed: () {
                     setState(() {
-                      if (_inputPassword.text.isEmpty) {
-                        Fluttertoast.showToast(
-                            msg: "Password Cannot be Empty!",
-                            toastLength: Toast.LENGTH_SHORT,
-                            gravity: ToastGravity.CENTER,
-                            timeInSecForIosWeb: 1,
-                            fontSize: 16.0);
-                      } else {
+                      if (!_checkFieldIsEmpty(_inputPassword)) {
                         auth.signInWithEmailAndPassword(
                             email: _inputEmail.text,
                             password: _inputPassword.text);
-
+                        _emailMode = !_emailMode;
                         _inputEmail.clear();
                         _inputPassword.clear();
-                        _emailMode = !_emailMode;
                       }
                     });
                   },
@@ -190,6 +174,24 @@ class _AccountScreenLoginState extends State<AccountScreenLogin> {
         ));
   }
 
+  /// Check if the input email or password is empty
+  bool _checkFieldIsEmpty(TextEditingController controller) {
+    if (controller.text.isEmpty) {
+      Fluttertoast.showToast(
+          msg: "Input Cannot be Empty!",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 2,
+          fontSize: 16.0);
+      return true;
+    }
+    return false;
+  }
+
+  /// User Information State, Currently support retrieving data from Firebase
+  /// The Implementation of this function has precondition that the current
+  /// state has an currentUser instance.
+  /// TODO: UI is not implemented
   Widget getAccountProfile(Auth auth) {
     return Scaffold(
       appBar: AppBar(
@@ -206,44 +208,57 @@ class _AccountScreenLoginState extends State<AccountScreenLogin> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const CircleAvatar(
-              radius: 60,
-              backgroundImage: AssetImage(
-                'images/UnknownUser.jpg', // Replace with the user's profile picture URL
-              ),
-            ),
-            const SizedBox(height: 16.0),
-            const Text(
-              'John Doe', // Replace with the user's name
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 8.0),
-            const Text(
-              'john.doe@example.com', // Replace with the user's email
-              style: TextStyle(fontSize: 16, color: Colors.grey),
-            ),
-            const SizedBox(height: 16.0),
-            ListTile(
-              leading: const Icon(Icons.phone),
-              title: const Text('123-456-7890'),
-              // Replace with the user's phone number
-              onTap: () {
-                // Handle phone number tap
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.location_on),
-              title: const Text('New York, USA'),
-              // Replace with the user's location
-              onTap: () {
-                // Handle location tap
-              },
-            ),
-            // Add more user information as needed
-          ],
+        child: FutureBuilder<UserModel?>(
+          future: auth.getUserInfo(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              if (snapshot.hasData) {
+                UserModel userData = snapshot.data as UserModel;
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    CircleAvatar(
+                      radius: 60,
+                      backgroundImage: AssetImage(
+                        userData
+                            .avatar, // Replace with the user's profile picture URL
+                      ),
+                    ),
+                    const SizedBox(height: 16.0),
+                    Text(
+                      userData.name, // Replace with the user's name
+                      style:
+                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 8.0),
+                    Text(
+                      userData.email, // Replace with the user's email
+                      style: TextStyle(fontSize: 16, color: Colors.grey),
+                    ),
+                    const SizedBox(height: 16.0),
+                    ListTile(
+                      leading: const Icon(Icons.phone),
+                      title: Text(userData.phoneNumber),
+                      // Replace with the user's phone number
+                      onTap: () {
+                        // Handle phone number tap
+                      },
+                    ),
+                    ListTile(
+                      leading: const Icon(Icons.location_on),
+                      title: Text(userData.address),
+                      // Replace with the user's location
+                      onTap: () {
+                        // Handle location tap
+                      },
+                    ),
+                    // Add more user information as needed
+                  ],
+                );
+              }
+            }
+            return const Center(child: CircularProgressIndicator());
+          },
         ),
       ),
     );

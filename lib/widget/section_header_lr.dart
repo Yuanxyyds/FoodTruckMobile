@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:food_truck_mobile/widget/text.dart';
 
-class SectionHeaderSingleLine extends StatelessWidget {
-  const SectionHeaderSingleLine({super.key, required this.text});
+/// This class contains Header Option, which text is in between of (left and
+/// right) two horizontal dividers.
+class SectionHeaderLR extends StatelessWidget {
+  const SectionHeaderLR({super.key, required this.text});
 
   final String text;
 

@@ -3,8 +3,10 @@ import 'package:food_truck_mobile/helper/constants.dart';
 import 'package:food_truck_mobile/screen/restaurant_menu_screen.dart';
 import 'package:food_truck_mobile/widget/text.dart';
 
-class SearchRestaurant extends StatelessWidget {
-  const SearchRestaurant(
+/// This is the Restaurant Button on the Home Screen, Slightly different UI than
+/// [SearchRestaurantButton]
+class HomeRestaurantButton extends StatelessWidget {
+  const HomeRestaurantButton(
       {super.key,
       this.imageUrl,
       required this.restaurantName,
@@ -21,40 +23,34 @@ class SearchRestaurant extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: GestureDetector(
-        onTap: () {
-          Navigator.of(context).push(
-            PageRouteBuilder(
-              pageBuilder: (context, animation, secondaryAnimation) =>
-                  RestaurantMenuScreen(
-                      restaurantName: restaurantName,
-                      restaurantDescription: 'restaurantDescription',
-                      restaurantRating: 5.0,
-                      foodItems: const [
-                    'Food 1',
-                    'Food 2',
-                    'Food3',
-                    'Food4',
-                    'Food5'
-                  ]),
-              transitionDuration: Duration.zero,
-            ),
-          );
-        },
-        child: Container(
-          height: 100,
-          decoration: BoxDecoration(
-              color: Colors.transparent,
-              borderRadius: BorderRadius.circular(8)),
-          child: Row(
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context).push(
+          PageRouteBuilder(
+            pageBuilder: (context, animation, secondaryAnimation) =>
+                RestaurantMenuScreen(
+                    restaurantName: restaurantName,
+                    restaurantDescription: 'restaurantDescription',
+                    restaurantRating: 5.0,
+                    foodItems: const ['Food 1', 'Food 2']),
+            transitionDuration: Duration.zero,
+          ),
+        );
+      },
+      child: Container(
+        width: 230,
+        height: 160,
+        decoration: BoxDecoration(
+            color: Constants.whiteColor,
+            borderRadius: BorderRadius.circular(8)),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
             children: [
               if (imageUrl == null)
                 Expanded(
-                  flex: 2,
                   child: Container(
-                    height: 125,
+                    width: 250,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8),
                       image: const DecorationImage(
@@ -68,9 +64,8 @@ class SearchRestaurant extends StatelessWidget {
                 ),
               if (imageUrl != null)
                 Expanded(
-                  flex: 2,
                   child: Container(
-                    height: 125,
+                    width: 250,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8),
                       image: DecorationImage(
@@ -82,36 +77,32 @@ class SearchRestaurant extends StatelessWidget {
                     ),
                   ),
                 ),
-              const SizedBox(
-                width: 8,
-              ),
               Expanded(
-                  flex: 3,
                   child: Column(
-                    children: [
-                      Align(
-                        alignment: Alignment.topLeft,
-                        child: TextTitleSmall(
-                          text: restaurantName,
-                          isBold: true,
-                        ),
+                children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: TextTitleSmall(
+                      text: restaurantName,
+                      isBold: true,
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: TextLabelSmall(
+                      text: label,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 4,
                       ),
-                      Align(
-                        alignment: Alignment.topLeft,
-                        child: TextLabelSmall(
-                          text: label,
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 4,
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                          child: _DeliveryPriceBar(
-                        deliveryPrice: deliveryPrice,
-                        priceCategory: priceCategory,
-                      )),
-                    ],
+                    ),
+                  ),
+                  Expanded(
+                      child: _DeliveryPriceBar(
+                    deliveryPrice: deliveryPrice,
+                    priceCategory: priceCategory,
                   )),
+                ],
+              )),
             ],
           ),
         ),

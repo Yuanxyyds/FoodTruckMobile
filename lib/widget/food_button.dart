@@ -4,13 +4,16 @@ import 'package:food_truck_mobile/screen/restaurant_menu_screen.dart';
 import 'package:food_truck_mobile/widget/popular_tag.dart';
 import 'package:food_truck_mobile/widget/text.dart';
 
-class MenuFood extends StatelessWidget {
-  const MenuFood({super.key,
-    this.imageUrl,
-    required this.foodName,
-    required this.description,
-    required this.price,
-    this.isPopular = true});
+/// This class contains a [FoodButton] that can be pressed to view the food's
+/// details
+class FoodButton extends StatelessWidget {
+  const FoodButton(
+      {super.key,
+      this.imageUrl,
+      required this.foodName,
+      required this.description,
+      required this.price,
+      this.isPopular = true});
 
   final String? imageUrl;
   final String foodName;
@@ -57,7 +60,11 @@ class MenuFood extends StatelessWidget {
                         padding: const EdgeInsets.fromLTRB(0, 2, 0, 0),
                         child: Row(
                           children: [
-                            Expanded(child: TextTitleSmall(text: '\$ $price', isBold: true,)),
+                            Expanded(
+                                child: TextTitleSmall(
+                              text: '\$ $price',
+                              isBold: true,
+                            )),
                             if (isPopular) const PopularTag(),
                           ],
                         ),
@@ -66,7 +73,9 @@ class MenuFood extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(width: 8,),
+              const SizedBox(
+                width: 8,
+              ),
               if (imageUrl == null)
                 Expanded(
                   flex: 1,
@@ -106,5 +115,3 @@ class MenuFood extends StatelessWidget {
     );
   }
 }
-
-
