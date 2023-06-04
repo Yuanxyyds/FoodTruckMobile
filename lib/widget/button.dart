@@ -6,7 +6,7 @@ import 'text.dart';
 class Button extends StatelessWidget {
   const Button({
     super.key,
-    required this.text,
+    this.text,
     this.textColor,
     this.backgroundColor,
     this.icon,
@@ -16,7 +16,7 @@ class Button extends StatelessWidget {
     this.takeLeastSpace = false,
   });
 
-  final String text;
+  final String? text;
   final Color? textColor;
   final Color? backgroundColor;
   final IconData? icon;
@@ -44,10 +44,11 @@ class Button extends StatelessWidget {
           mainAxisSize: takeLeastSpace ? MainAxisSize.min : MainAxisSize.max,
           children: [
             if (icon != null) Icon(icon),
-            if (icon != null) const SizedBox(width: 8),
+            if (icon != null && text != null) const SizedBox(width: 8),
+            if (text != null)
             Flexible(
                 child: TextBodyMedium(
-              text: text,
+              text: text!,
               isBold: true,
               color: defaultTextColor,
             )),
