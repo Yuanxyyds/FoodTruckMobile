@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:food_truck_mobile/widget/counter.dart';
 import 'package:food_truck_mobile/widget/text.dart';
 
 import '../helper/constants.dart';
 import '../widget/popular_tag.dart';
 import '../widget/section_divider.dart';
 
-class FoodDetailScreen extends StatelessWidget {
+class FoodDetailScreen extends StatefulWidget {
   final String? imageUrl;
   final String foodName;
   final String description;
@@ -22,16 +21,31 @@ class FoodDetailScreen extends StatelessWidget {
     required this.isPopular,
   }) : super(key: key);
 
+  @override
+  State<FoodDetailScreen> createState() => _FoodDetailScreenState();
+}
+
+class _FoodDetailScreenState extends State<FoodDetailScreen> {
+  int count = 1;
+
   // Ternary operator to get Url, simplifying build method
   String getImageUrlOrDefault() {
-    return imageUrl ?? 'images/DefaultRestaurantImage.jpeg';
+    return widget.imageUrl ?? 'images/DefaultRestaurantImage.jpeg';
+  }
+
+  double calculateSubtotal() {
+    return count * widget.price;
   }
 
   @override
   Widget build(BuildContext context) {
+    double subtotal = calculateSubtotal();
+    String url = getImageUrlOrDefault();
+    Color removeColor = count == 1 ? Colors.grey : Colors.black;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(foodName),
+        title: Text(widget.foodName),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
@@ -43,7 +57,7 @@ class FoodDetailScreen extends StatelessWidget {
                 color: Colors.transparent,
                 borderRadius: BorderRadius.circular(8),
                 image: DecorationImage(
-                  image: AssetImage(getImageUrlOrDefault()),
+                  image: AssetImage(url),
                   fit: BoxFit.fill,
                 ),
               ),
@@ -54,11 +68,11 @@ class FoodDetailScreen extends StatelessWidget {
                 children: [
                   Expanded(
                     child: TextTitleLarge(
-                      text: foodName,
+                      text: widget.foodName,
                       isBold: true,
                     ),
                   ),
-                  if (isPopular) const PopularTag()
+                  if (widget.isPopular) const PopularTag()
                 ],
               ),
             ),
@@ -70,7 +84,7 @@ class FoodDetailScreen extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.only(left: 4.0),
                     child: Text(
-                      description,
+                      widget.description,
                     ),
                   ),
                 ),
@@ -79,7 +93,7 @@ class FoodDetailScreen extends StatelessWidget {
                   child: Align(
                       alignment: Alignment.topRight,
                       child: TextTitleMedium(
-                        text: '\$ $price',
+                        text: '\$ ${widget.price.toStringAsFixed(2)}',
                         isBold: true,
                         padding: EdgeInsets.zero,
                       )),
@@ -108,7 +122,7 @@ class FoodDetailScreen extends StatelessWidget {
                   ),
                 ),
                 TextTitleMedium(
-                  text: '\$ $price',
+                  text: '\$ ${subtotal.toStringAsFixed(2)}',
                   isBold: true,
                 )
               ],
@@ -118,7 +132,43 @@ class FoodDetailScreen extends StatelessWidget {
             ),
             Row(
               children: [
-                const Expanded(flex: 4, child: Counter()),
+                Expanded(
+                    flex: 4,
+                    child: Container(
+                      height: 50.0,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                count = count > 1 ? count - 1 : 1;
+                              });
+                            },
+                            child: Icon(
+                              Icons.remove,
+                              color: removeColor,
+                            ),
+                          ),
+                          Text(
+                            count.toString(),
+                            style: const TextStyle(fontSize: 20),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                count += 1;
+                              });
+                            },
+                            child: const Icon(Icons.add),
+                          ),
+                        ],
+                      ),
+                    )),
                 const SizedBox(
                   width: 10.0,
                 ),
