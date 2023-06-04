@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:food_truck_mobile/widget/text.dart';
 
+/// This class contains single horizontal divider with default horizontal
+/// padding = 8
 class SectionDivider extends StatelessWidget {
   const SectionDivider({
     super.key,

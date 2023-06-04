@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:food_truck_mobile/widget/home_restaurant.dart';
+import 'package:food_truck_mobile/widget/home_restaurant_button.dart';
 import 'package:food_truck_mobile/widget/input_field.dart';
 import 'package:food_truck_mobile/widget/section_divider.dart';
 import 'package:food_truck_mobile/widget/text.dart';
 
 import '../widget/bottom_navigation.dart';
-import '../widget/search_restaurant.dart';
+import '../widget/search_restaurant_button.dart';
+
+/// The [SearchScreen] of the App, it contains two states: View Recommendation
+/// State when the search bar is not clicked, Search State when the search bar
+/// is clicked
 
 class SearchScreen extends StatefulWidget {
+  const SearchScreen({super.key});
+
   @override
   State<SearchScreen> createState() => _SearchScreenState();
 }
@@ -16,7 +22,6 @@ class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController _searchController = TextEditingController();
   bool _isSearching = false;
   final FocusNode _textFieldFocusNode = FocusNode();
-
   final List<String> _recommendedRestaurants = [
     'Restaurant A',
     'Restaurant B',
@@ -24,27 +29,12 @@ class _SearchScreenState extends State<SearchScreen> {
     'McDonald',
     'KFC',
   ];
-
   List<String> _searchResults = [];
 
   @override
   void dispose() {
     _searchController.dispose();
     super.dispose();
-  }
-
-  void _search(String query) {
-    setState(() {
-      _searchResults.clear();
-      if (query.isNotEmpty) {
-        // Perform search logic here, e.g., query the database or API
-        // and update _searchResults list accordingly
-        _searchResults = _recommendedRestaurants
-            .where((restaurant) =>
-                restaurant.toLowerCase().contains(query.toLowerCase()))
-            .toList();
-      }
-    });
   }
 
   @override
@@ -61,6 +51,22 @@ class _SearchScreenState extends State<SearchScreen> {
         ));
   }
 
+  /// The Action to filter restaurant based on user input
+  void _search(String query) {
+    setState(() {
+      _searchResults.clear();
+      if (query.isNotEmpty) {
+        // Perform search logic here, e.g., query the database or API
+        // and update _searchResults list accordingly
+        _searchResults = _recommendedRestaurants
+            .where((restaurant) =>
+                restaurant.toLowerCase().contains(query.toLowerCase()))
+            .toList();
+      }
+    });
+  }
+
+  /// The Searching Bar, it has two different UI in two different states
   Widget _appBar() {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0, 20, 0, 5),
@@ -78,8 +84,6 @@ class _SearchScreenState extends State<SearchScreen> {
                 setState(() {
                   if (!_isSearching) {
                     _isSearching = !_isSearching;
-                    _searchResults.clear();
-                    _searchController.clear();
                   }
                 });
               },
@@ -105,6 +109,7 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 
+  /// The Component of View Recommendation Restaurants State
   Widget _buildRecommendedRestaurants() {
     return Column(children: [
       _appBar(),
@@ -115,7 +120,7 @@ class _SearchScreenState extends State<SearchScreen> {
             bool isEven = index % 2 == 0;
             if (isEven) {
               final restaurant = _recommendedRestaurants[index ~/ 2];
-              return SearchRestaurant(
+              return SearchRestaurantButton(
                   restaurantName: restaurant,
                   label: 'label',
                   deliveryPrice: -1,
@@ -129,6 +134,7 @@ class _SearchScreenState extends State<SearchScreen> {
     ]);
   }
 
+  /// The Component of Search State
   Widget _buildSearchResults() {
     if (_searchResults.isEmpty) {
       return Column(children: [
@@ -152,7 +158,7 @@ class _SearchScreenState extends State<SearchScreen> {
             bool isEven = index % 2 == 0;
             if (isEven) {
               final restaurant = _searchResults[index ~/ 2];
-              return SearchRestaurant(
+              return SearchRestaurantButton(
                   restaurantName: restaurant,
                   label: 'label',
                   deliveryPrice: -1,

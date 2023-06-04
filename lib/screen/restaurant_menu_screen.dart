@@ -1,10 +1,13 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:food_truck_mobile/widget/menu_food.dart';
+import 'package:food_truck_mobile/widget/food_button.dart';
 import 'package:food_truck_mobile/widget/section_divider.dart';
-import 'package:food_truck_mobile/widget/section_header_in_between.dart';
+import 'package:food_truck_mobile/widget/section_header_tb.dart';
 import 'package:food_truck_mobile/widget/text.dart';
+
+/// The [RestaurantMenuScreen], the parameter should be future changes to a
+/// Restaurant Model
 
 class RestaurantMenuScreen extends StatelessWidget {
   final String restaurantName;
@@ -58,7 +61,7 @@ class RestaurantMenuScreen extends StatelessWidget {
               padding: EdgeInsets.zero,
             ),
 
-            const SectionHeaderInBetween(text: 'Uncategorized'),
+            const SectionHeaderTB(text: 'Uncategorized'),
             ..._getContent(),
             const SizedBox(height: 16),
             Align(
@@ -76,10 +79,11 @@ class RestaurantMenuScreen extends StatelessWidget {
     );
   }
 
+  /// TODO: This should be future rebuild based on Section + items
   List<Widget> _getContent() {
     List<Widget> content = [];
     foodItems?.forEach((element) {
-      content.add(MenuFood(
+      content.add(FoodButton(
           foodName: element,
           description:
               'This is my food, it contains this, that and those and this is a very long string hihihihihihihi',

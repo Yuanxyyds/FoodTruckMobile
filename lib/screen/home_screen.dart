@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:food_truck_mobile/screen/restaurant_menu_screen.dart';
-import 'package:food_truck_mobile/widget/home_restaurant.dart';
-import 'package:food_truck_mobile/widget/section_header_in_between.dart';
+import 'package:food_truck_mobile/widget/home_restaurant_button.dart';
+import 'package:food_truck_mobile/widget/section_header_tb.dart';
 import '../widget/bottom_navigation.dart';
 import '../widget/text.dart';
+
+/// The [HomeScreen] of the app
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -31,7 +32,7 @@ class HomeScreen extends StatelessWidget {
               height: 16,
             ),
             // Section 1
-            const SectionHeaderInBetween(text: 'New on Food Truck'),
+            const SectionHeaderTB(text: 'New on Food Truck'),
             SizedBox(
               width: MediaQuery.of(context).size.width,
               height: 200,
@@ -39,8 +40,8 @@ class HomeScreen extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(vertical: 20),
                 child: ListView(
                   scrollDirection: Axis.horizontal,
-                  children: [
-                    HomeRestaurant(
+                  children: const [
+                    HomeRestaurantButton(
                       restaurantName: 'Restaurant 1',
                       label: 'Chinese food',
                       deliveryPrice: -1,
@@ -49,7 +50,7 @@ class HomeScreen extends StatelessWidget {
                     SizedBox(
                       width: 20,
                     ),
-                    HomeRestaurant(
+                    HomeRestaurantButton(
                       restaurantName: 'Restaurant 2',
                       label: 'Korean food, Sandwich',
                       deliveryPrice: 1.99,
@@ -60,7 +61,7 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
             // Section 2
-            const SectionHeaderInBetween(text: 'Popular Food Truck'),
+            const SectionHeaderTB(text: 'Popular Food Truck'),
             SizedBox(
               width: MediaQuery.of(context).size.width,
               height: 200,
@@ -69,7 +70,7 @@ class HomeScreen extends StatelessWidget {
                 child: ListView(
                   scrollDirection: Axis.horizontal,
                   children: const [
-                    HomeRestaurant(
+                    HomeRestaurantButton(
                       restaurantName: 'Restaurant 1',
                       label: 'Chinese food',
                       deliveryPrice: -1,
@@ -78,7 +79,7 @@ class HomeScreen extends StatelessWidget {
                     SizedBox(
                       width: 20,
                     ),
-                    HomeRestaurant(
+                    HomeRestaurantButton(
                       restaurantName: 'Restaurant 2',
                       label: 'Korean food, Sandwich',
                       deliveryPrice: 1.99,
@@ -89,7 +90,7 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
             // Section 3
-            const SectionHeaderInBetween(text: 'Besides Food Truck'),
+            const SectionHeaderTB(text: 'Besides Food Truck'),
             SizedBox(
               width: MediaQuery.of(context).size.width,
               height: 200,
@@ -98,7 +99,7 @@ class HomeScreen extends StatelessWidget {
                 child: ListView(
                   scrollDirection: Axis.horizontal,
                   children: const [
-                    HomeRestaurant(
+                    HomeRestaurantButton(
                       restaurantName: 'Restaurant 1',
                       label: 'Chinese food',
                       deliveryPrice: 0,
@@ -107,7 +108,7 @@ class HomeScreen extends StatelessWidget {
                     SizedBox(
                       width: 20,
                     ),
-                    HomeRestaurant(
+                    HomeRestaurantButton(
                       restaurantName: 'Restaurant 2',
                       label: 'Korean food, Sandwich',
                       deliveryPrice: 0.99,

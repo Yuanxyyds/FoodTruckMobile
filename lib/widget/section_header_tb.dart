@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:food_truck_mobile/widget/text.dart';
 
-class SectionHeaderInBetween extends StatelessWidget {
-  const SectionHeaderInBetween({super.key, required this.text});
+/// This class contains Header Option, which text is in between of (top and
+/// bottom) by two horizontal dividers.
+class SectionHeaderTB extends StatelessWidget {
+  const SectionHeaderTB({super.key, required this.text});
 
   final String text;
 
