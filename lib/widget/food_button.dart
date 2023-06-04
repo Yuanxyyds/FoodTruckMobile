@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:food_truck_mobile/helper/constants.dart';
+import 'package:food_truck_mobile/screen/food_detail_screen.dart';
 import 'package:food_truck_mobile/screen/restaurant_menu_screen.dart';
 import 'package:food_truck_mobile/widget/popular_tag.dart';
 import 'package:food_truck_mobile/widget/text.dart';
@@ -26,7 +27,20 @@ class FoodButton extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: GestureDetector(
-        onTap: () {},
+        onTap: () {
+          Navigator.of(context).push(
+            PageRouteBuilder(
+              pageBuilder: (context, animation, secondaryAnimation) =>
+                  FoodDetailScreen(
+                      imageUrl: imageUrl,
+                      foodName: foodName,
+                      description: description,
+                      price: price,
+                      isPopular: isPopular),
+              transitionDuration: Duration.zero,
+            ),
+          );
+        },
         child: Container(
           height: 110,
           decoration: BoxDecoration(
@@ -73,9 +87,7 @@ class FoodButton extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(
-                width: 8,
-              ),
+              const SizedBox(width: 8,),
               if (imageUrl == null)
                 Expanded(
                   flex: 1,

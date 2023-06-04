@@ -10,6 +10,8 @@ class FoodTruckThemeData {
     primaryColorLight: Constants.primaryColorLight,
     brightness: Brightness.light,
     scaffoldBackgroundColor: Constants.backgroundColor,
+    bottomSheetTheme:
+        const BottomSheetThemeData(backgroundColor: Constants.backgroundColor),
     useMaterial3: true,
     fontFamily: 'Poppins',
     appBarTheme: const AppBarTheme(
