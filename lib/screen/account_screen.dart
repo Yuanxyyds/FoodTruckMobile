@@ -122,6 +122,18 @@ class _AccountScreenState extends State<AccountScreen> {
                     ? const Icon(Icons.email)
                     : const Icon(Icons.password),
                 controller: _emailMode ? _inputEmail : _inputPassword,
+                suffixIcon: _emailMode
+                    ? null
+                    : IconButton(
+                        icon: const Icon(Icons.arrow_back_outlined),
+                        onPressed: () {
+                          setState(() {
+                            _emailMode = !_emailMode;
+                            _inputEmail.clear();
+                            _inputPassword.clear();
+                          });
+                        },
+                      ),
               ),
               const SizedBox(height: 8),
               if (_emailMode)
@@ -166,10 +178,14 @@ class _AccountScreenState extends State<AccountScreen> {
                   },
                 )),
               if (!_emailMode)
-                const Center(
-                    child: ClickableLabel(
-                  text: 'Forgot your password?',
-                )),
+                Center(
+                  child: ClickableLabel(
+                    text: 'Forgot your password?',
+                    onTap: () {
+                      auth.sendPasswordResetEmail(_inputEmail.text);
+                    },
+                  ),
+                ),
             ],
           ),
         ));

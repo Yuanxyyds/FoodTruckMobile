@@ -28,8 +28,10 @@ class Auth extends ChangeNotifier {
           fontSize: 16.0);
       notifyListeners();
     } on FirebaseAuthException catch (e) {
+      String input = e.toString();
+      String substring = input.substring(input.indexOf("]") + 1);
       Fluttertoast.showToast(
-          msg: "Sign in Failed: $e",
+          msg: "Sign in Failed: $substring",
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
           timeInSecForIosWeb: 2,
@@ -49,8 +51,10 @@ class Auth extends ChangeNotifier {
         fontSize: 16.0,
       );
     } catch (e) {
+      String input = e.toString();
+      String substring = input.substring(input.indexOf("]") + 1);
       Fluttertoast.showToast(
-        msg: "Logout Failed; $e",
+        msg: "Logout Failed; $substring",
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
         timeInSecForIosWeb: 2,
@@ -77,8 +81,10 @@ class Auth extends ChangeNotifier {
       );
       _initializeNewUser(email);
     } catch (e) {
+      String input = e.toString();
+      String substring = input.substring(input.indexOf("]") + 1);
       Fluttertoast.showToast(
-        msg: "Registration Failed: $e",
+        msg: "Registration Failed: $substring",
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
         timeInSecForIosWeb: 2,
@@ -99,8 +105,10 @@ class Auth extends ChangeNotifier {
           UserModel(id: currentUser?.uid, name: 'Users $email', email: email)
               .toJson());
     } catch (e){
+      String input = e.toString();
+      String substring = input.substring(input.indexOf("]") + 1);
       Fluttertoast.showToast(
-        msg: "Initialize Failed: $e",
+        msg: "Initialize Failed: $substring",
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
         timeInSecForIosWeb: 2,
@@ -125,8 +133,10 @@ class Auth extends ChangeNotifier {
       notifyListeners();
       return true;
     } catch (e) {
+      String input = e.toString();
+      String substring = input.substring(input.indexOf("]") + 1);
       Fluttertoast.showToast(
-        msg: "Initialize Failed: $e",
+        msg: "Initialize Failed: $substring",
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
         timeInSecForIosWeb: 2,
@@ -143,8 +153,10 @@ class Auth extends ChangeNotifier {
       notifyListeners();
       return true;
     } catch (e) {
+      String input = e.toString();
+      String substring = input.substring(input.indexOf("]") + 1);
       Fluttertoast.showToast(
-        msg: "Failed to update email: $e",
+        msg: "Failed to update email: $substring",
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
         timeInSecForIosWeb: 2,
@@ -154,7 +166,28 @@ class Auth extends ChangeNotifier {
     }
   }
 
-
+  Future<void> sendPasswordResetEmail(String email) async {
+    try {
+      await _firebaseAuth.sendPasswordResetEmail(email: email);
+      Fluttertoast.showToast(
+        msg: "A password reset email has sent!",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 2,
+        fontSize: 16.0,
+      );
+    } catch (e) {
+      String input = e.toString();
+      String substring = input.substring(input.indexOf("]") + 1);
+      Fluttertoast.showToast(
+        msg: "Failed to send reset email: $substring",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 2,
+        fontSize: 16.0,
+      );
+    }
+  }
 
 
 
@@ -169,8 +202,10 @@ class Auth extends ChangeNotifier {
       var documentSnapshot = await userRef.get();
       return UserModel.fromSnapshot(documentSnapshot);
     } catch (e) {
+      String input = e.toString();
+      String substring = input.substring(input.indexOf("]") + 1);
       Fluttertoast.showToast(
-        msg: "Fail to get user info: $e",
+        msg: "Fail to get user info: $substring",
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
         timeInSecForIosWeb: 2,
