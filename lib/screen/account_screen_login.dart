@@ -7,6 +7,7 @@ import 'package:food_truck_mobile/widget/clickable_label.dart';
 import 'package:food_truck_mobile/widget/input_field.dart';
 import 'package:food_truck_mobile/widget/section_header_single_line.dart';
 import 'package:food_truck_mobile/widget/text.dart';
+import 'package:provider/provider.dart';
 import '../helper/constants.dart';
 import '../widget/bottom_navigation.dart';
 import '../widget/button.dart';
@@ -24,38 +25,29 @@ class _AccountScreenLoginState extends State<AccountScreenLogin> {
   final TextEditingController _inputEmail = TextEditingController();
   final TextEditingController _inputPassword = TextEditingController();
   bool _emailMode = true;
-  final Auth _auth = Auth();
+
+  @override
+  void dispose() {
+    _inputEmail.dispose();
+    _inputPassword.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
+    Auth auth = context.watch<Auth>();
+    return auth.currentUser == null
+        ? getLoginContent(auth)
+        : getAccountProfile(auth);
+  }
+
+  Widget getLoginContent(Auth auth) {
     return Scaffold(
         appBar: AppBar(
           title: const TextHeadlineSmall(
             text: 'My Account',
           ),
-          actions: [
-            Switch(
-              value: true,
-              onChanged: (bool newValue) {
-                Navigator.of(context).pop();
-                Navigator.of(context).push(
-                  PageRouteBuilder(
-                    pageBuilder: (context, animation, secondaryAnimation) =>
-                        const AccountScreenProfile(),
-                    transitionDuration: Duration.zero,
-                  ),
-                );
-              },
-            ),
-          ],
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            _auth.signOut();
-          },
-          child: Icon(Icons.add),
-        ),
-
         bottomNavigationBar: const BottomNavigation(
           currentIndex: 3,
         ),
@@ -167,30 +159,13 @@ class _AccountScreenLoginState extends State<AccountScreenLogin> {
                             timeInSecForIosWeb: 1,
                             fontSize: 16.0);
                       } else {
-                        _auth.signInWithEmailAndPassword(
+                        auth.signInWithEmailAndPassword(
                             email: _inputEmail.text,
                             password: _inputPassword.text);
-                        if (_auth.currentUser != null) {
-                          Fluttertoast.showToast(
-                              msg: "Login Successed!",
-                              toastLength: Toast.LENGTH_SHORT,
-                              gravity: ToastGravity.CENTER,
-                              timeInSecForIosWeb: 1,
-                              fontSize: 16.0);
-                          _inputEmail.clear();
-                          _inputPassword.clear();
-                          _emailMode = !_emailMode;
-                        } else {
-                          Fluttertoast.showToast(
-                              msg: "Invalid Password/Account!",
-                              toastLength: Toast.LENGTH_SHORT,
-                              gravity: ToastGravity.CENTER,
-                              timeInSecForIosWeb: 1,
-                              fontSize: 16.0);
-                          _inputEmail.clear();
-                          _inputPassword.clear();
-                          _emailMode = !_emailMode;
-                        }
+
+                        _inputEmail.clear();
+                        _inputPassword.clear();
+                        _emailMode = !_emailMode;
                       }
                     });
                   },
@@ -213,5 +188,64 @@ class _AccountScreenLoginState extends State<AccountScreenLogin> {
             ],
           ),
         ));
+  }
+
+  Widget getAccountProfile(Auth auth) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('User Information'),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          await auth.signOut();
+        },
+        child: const Icon(Icons.remove),
+      ),
+      bottomNavigationBar: const BottomNavigation(
+        currentIndex: 3,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const CircleAvatar(
+              radius: 60,
+              backgroundImage: AssetImage(
+                'images/UnknownUser.jpg', // Replace with the user's profile picture URL
+              ),
+            ),
+            const SizedBox(height: 16.0),
+            const Text(
+              'John Doe', // Replace with the user's name
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 8.0),
+            const Text(
+              'john.doe@example.com', // Replace with the user's email
+              style: TextStyle(fontSize: 16, color: Colors.grey),
+            ),
+            const SizedBox(height: 16.0),
+            ListTile(
+              leading: const Icon(Icons.phone),
+              title: const Text('123-456-7890'),
+              // Replace with the user's phone number
+              onTap: () {
+                // Handle phone number tap
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.location_on),
+              title: const Text('New York, USA'),
+              // Replace with the user's location
+              onTap: () {
+                // Handle location tap
+              },
+            ),
+            // Add more user information as needed
+          ],
+        ),
+      ),
+    );
   }
 }
