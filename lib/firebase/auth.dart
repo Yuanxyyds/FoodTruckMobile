@@ -88,14 +88,78 @@ class Auth extends ChangeNotifier {
     notifyListeners();
   }
 
+
+
   /// Initialize the new user profile
-  void _initializeNewUser(String email) {
-    CollectionReference users = _firestore.collection('users');
-    DocumentReference userRef = users.doc(currentUser?.uid);
-    userRef.set(
-        UserModel(id: currentUser?.uid, name: 'Users $email', email: email)
-            .toJson());
+  Future<void> _initializeNewUser (String email) async {
+    try {
+      CollectionReference users = _firestore.collection('users');
+      DocumentReference userRef = users.doc(currentUser?.uid);
+      await userRef.set(
+          UserModel(id: currentUser?.uid, name: 'Users $email', email: email)
+              .toJson());
+    } catch (e){
+      Fluttertoast.showToast(
+        msg: "Initialize Failed: $e",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 2,
+        fontSize: 16.0,
+      );
+    }
   }
+
+  /// Initialize the new user profile
+  Future<bool> updateUser(UserModel user) async {
+    try {
+      CollectionReference users = _firestore.collection('users');
+      DocumentReference userRef = users.doc(user.id);
+      await userRef.update(user.toJson());
+      Fluttertoast.showToast(
+        msg: "Update Successfully",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 2,
+        fontSize: 16.0,
+      );
+      notifyListeners();
+      return true;
+    } catch (e) {
+      Fluttertoast.showToast(
+        msg: "Initialize Failed: $e",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 2,
+        fontSize: 16.0,
+      );
+      return false;
+    }
+  }
+
+  /// Update Email
+  Future<bool> updateEmail(String newEmail) async {
+    try {
+      await FirebaseAuth.instance.currentUser?.updateEmail(newEmail);
+      notifyListeners();
+      return true;
+    } catch (e) {
+      Fluttertoast.showToast(
+        msg: "Failed to update email: $e",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 2,
+        fontSize: 16.0,
+      );
+      return false;
+    }
+  }
+
+
+
+
+
+
+
 
   /// Return the Current User's information
   Future<UserModel?> getUserInfo() async {

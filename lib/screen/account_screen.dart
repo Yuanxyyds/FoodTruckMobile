@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:food_truck_mobile/firebase/auth.dart';
 import 'package:food_truck_mobile/icons/google_icon.dart';
 import 'package:food_truck_mobile/models/user_model.dart';
+import 'package:food_truck_mobile/screen/edit_profile_screen.dart';
 import 'package:food_truck_mobile/screen/register_screen.dart';
 import 'package:food_truck_mobile/widget/clickable_label.dart';
 import 'package:food_truck_mobile/widget/input_field.dart';
@@ -195,7 +196,7 @@ class _AccountScreenState extends State<AccountScreen> {
   Widget getAccountProfile(Auth auth) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('User Information'),
+        title: const Text('My Account'),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
@@ -207,21 +208,34 @@ class _AccountScreenState extends State<AccountScreen> {
         currentIndex: 3,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
         child: FutureBuilder<UserModel?>(
           future: auth.getUserInfo(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
               if (snapshot.hasData) {
                 UserModel userData = snapshot.data as UserModel;
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                return ListView(
                   children: [
-                    CircleAvatar(
-                      radius: 60,
-                      backgroundImage: AssetImage(
-                        userData
-                            .avatar, // Replace with the user's profile picture URL
+                    Center(
+                      child: CircleAvatar(
+                        radius: 60,
+                        backgroundImage: AssetImage(
+                          userData.avatar,
+                        ),
+                      ),
+                    ),
+                    Center(
+                      child: ClickableLabel(
+                        text: 'edit',
+                        onTap: () {
+                          setState(() {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => EditProfileScreen(
+                                      userModel: userData,
+                                    )));
+                          });
+                        },
                       ),
                     ),
                     const SizedBox(height: 16.0),
