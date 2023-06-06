@@ -117,13 +117,16 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                 child: Text("Choose up to 4 additional items."),
               ),
               ..._getContent(),
+              const SizedBox(
+                height: 130.0,
+              ),
             ],
           ),
         ),
 
         // Subtotal information fixed at bottom
         bottomSheet: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 15.0),
+          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 15.0),
           child: SizedBox(
             height: 100.0,
             child: ListView(children: [
@@ -184,7 +187,7 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                         ),
                       )),
                   const SizedBox(
-                    width: 10.0,
+                    width: 15.0,
                   ),
                   Expanded(
                     flex: 6,
