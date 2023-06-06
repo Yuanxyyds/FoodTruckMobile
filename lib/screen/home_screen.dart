@@ -1,6 +1,12 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
+import 'package:food_truck_mobile/helper/user_location.dart';
 import 'package:food_truck_mobile/widget/home_restaurant_button.dart';
+import 'package:food_truck_mobile/widget/map.dart';
 import 'package:food_truck_mobile/widget/section_header_tb.dart';
+import 'package:location/location.dart';
+import 'package:provider/provider.dart';
 import '../widget/bottom_navigation.dart';
 import '../widget/text.dart';
 
@@ -11,7 +17,14 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    UserLocation userLocation = context.watch<UserLocation>();
+
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          userLocation.requestCurrentLocation();
+        },
+      ),
       appBar: AppBar(
         title: const TextHeadlineSmall(
           text: 'Home',
@@ -27,6 +40,20 @@ class HomeScreen extends StatelessWidget {
         ),
         child: ListView(
           children: [
+            SizedBox(
+                height: 300,
+                child: FutureBuilder<void>(
+                  future: userLocation.requestCurrentLocation(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      return MapWidget(
+                        currentUserLocation: userLocation.currentUserLocation,
+                      );
+                    } else {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                  },
+                )),
             Image.asset('images/HomeDecoration.png'),
             const SizedBox(
               height: 16,
