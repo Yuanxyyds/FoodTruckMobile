@@ -8,6 +8,7 @@ import 'package:food_truck_mobile/widget/section_header_tb.dart';
 import 'package:food_truck_mobile/widget/text.dart';
 
 import '../helper/constants.dart';
+import '../widget/button.dart';
 
 /// The [RestaurantMenuScreen], the parameter should be future changes to a
 /// Restaurant Model
@@ -88,7 +89,7 @@ class RestaurantMenuScreen extends StatelessWidget {
                       );
                     },
                     child: Container(
-                        height: 50.0,
+                        height: 45.0,
                         decoration: BoxDecoration(
                             border: Border.all(color: Constants.primaryColor),
                             borderRadius: BorderRadius.circular(8.0),
@@ -104,19 +105,14 @@ class RestaurantMenuScreen extends StatelessWidget {
                 width: 15.0,
               ),
               Expanded(
-                flex: 5,
-                child: Container(
-                    height: 50.0,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8.0),
-                        color: Constants.primaryColor),
-                    child: const Center(
-                      child: TextTitleMedium(
-                        text: "Checkout",
-                        color: Colors.white,
-                      ),
-                    )),
-              )
+                  flex: 5,
+                  child: Button(
+                    text: "Checkout",
+                    textColor: Colors.white,
+                    backgroundColor: Constants.primaryColor,
+                    takeLeastSpace: true,
+                    onPressed: () {},
+                  ))
             ],
           ),
         ),

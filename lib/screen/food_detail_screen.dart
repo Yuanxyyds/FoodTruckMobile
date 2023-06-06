@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:food_truck_mobile/widget/addition_food.dart';
+import 'package:food_truck_mobile/widget/button.dart';
 import 'package:food_truck_mobile/widget/text.dart';
 
 import '../helper/constants.dart';
@@ -160,13 +161,13 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            GestureDetector(
-                              onTap: () {
+                            IconButton(
+                              onPressed: () {
                                 setState(() {
                                   count = count > 1 ? count - 1 : 1;
                                 });
                               },
-                              child: Icon(
+                              icon: Icon(
                                 Icons.remove,
                                 color: removeColor,
                               ),
@@ -175,13 +176,15 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                               count.toString(),
                               style: const TextStyle(fontSize: 20),
                             ),
-                            GestureDetector(
-                              onTap: () {
+                            IconButton(
+                              onPressed: () {
                                 setState(() {
                                   count += 1;
                                 });
                               },
-                              child: const Icon(Icons.add),
+                              icon: const Icon(
+                                Icons.add,
+                              ),
                             ),
                           ],
                         ),
@@ -190,24 +193,16 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                     width: 15.0,
                   ),
                   Expanded(
-                    flex: 6,
-                    child: Container(
-                        height: 50.0,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8.0),
-                            color: Constants.primaryColor),
-                        child: const Center(
-                          child: TextTitleMedium(
-                            text: "Add to Order",
-                            color: Colors.white,
-                          ),
-                        )),
-                  )
+                      flex: 6,
+                      child: Button(
+                        text: "Add to Order",
+                        textColor: Colors.white,
+                        backgroundColor: Constants.primaryColor,
+                        takeLeastSpace: true,
+                        onPressed: () {},
+                      ))
                 ],
               ),
-              const SizedBox(
-                height: 10.0,
-              )
             ]),
           ),
         ));

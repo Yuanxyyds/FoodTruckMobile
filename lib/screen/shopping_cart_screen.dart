@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:food_truck_mobile/widget/button.dart';
 import 'package:food_truck_mobile/widget/cart_item.dart';
+import 'package:food_truck_mobile/widget/checkout_item.dart';
 import 'package:food_truck_mobile/widget/section_divider.dart';
 import 'package:food_truck_mobile/widget/text.dart';
 
@@ -34,43 +36,12 @@ class ShoppingCart extends StatelessWidget {
                 ),
                 const SectionDivider(),
                 ..._getContent(),
-                const Row(
-                  children: [
-                    Expanded(
-                        child: TextTitleMedium(
-                      text: "Subtotal",
-                    )),
-                    TextTitleMedium(
-                      text: '\$ 7.50',
-                      padding: EdgeInsets.zero,
-                    )
-                  ],
-                ),
-                const Row(
-                  children: [
-                    Expanded(
-                        child: TextTitleMedium(
-                      text: "Delivery costs",
-                    )),
-                    TextTitleMedium(
-                      text: '\$ 3.26',
-                      padding: EdgeInsets.zero,
-                    )
-                  ],
-                ),
-                const Row(
-                  children: [
-                    Expanded(
-                        child: TextTitleMedium(
-                      text: "Total",
-                      isBold: true,
-                    )),
-                    TextTitleMedium(
-                      text: '\$ 10.26',
-                      padding: EdgeInsets.zero,
-                      isBold: true,
-                    )
-                  ],
+                const CheckoutItem(name: "Subtotal", price: 7.50),
+                const CheckoutItem(name: "Delivery costs", price: 3.26),
+                const CheckoutItem(
+                  name: "Total",
+                  price: 10.26,
+                  isBold: true,
                 ),
                 const SizedBox(
                   height: 90.0,
@@ -84,18 +55,13 @@ class ShoppingCart extends StatelessWidget {
             child: Row(
               children: [
                 Expanded(
-                  child: Container(
-                      height: 50.0,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8.0),
-                          color: Constants.primaryColor),
-                      child: const Center(
-                        child: TextTitleMedium(
-                          text: "Checkout",
-                          color: Colors.white,
-                        ),
-                      )),
-                )
+                    child: Button(
+                  text: "Checkout",
+                  textColor: Colors.white,
+                  backgroundColor: Constants.primaryColor,
+                  takeLeastSpace: true,
+                  onPressed: () {},
+                ))
               ],
             ),
           ),

@@ -63,13 +63,13 @@ class _CartItemState extends State<CartItem> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  GestureDetector(
-                    onTap: () {
+                  IconButton(
+                    onPressed: () {
                       setState(() {
                         count = count > 1 ? count - 1 : 1;
                       });
                     },
-                    child: Icon(
+                    icon: Icon(
                       Icons.remove,
                       color: removeColor,
                     ),
@@ -78,13 +78,15 @@ class _CartItemState extends State<CartItem> {
                     count.toString(),
                     style: const TextStyle(fontSize: 20),
                   ),
-                  GestureDetector(
-                    onTap: () {
+                  IconButton(
+                    onPressed: () {
                       setState(() {
                         count += 1;
                       });
                     },
-                    child: const Icon(Icons.add),
+                    icon: const Icon(
+                      Icons.add,
+                    ),
                   ),
                 ],
               ),
