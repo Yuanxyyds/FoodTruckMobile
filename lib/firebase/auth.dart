@@ -10,6 +10,7 @@ class Auth extends ChangeNotifier {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   User? get currentUser => _firebaseAuth.currentUser;
+
   Stream<User?> get authStateChanges => _firebaseAuth.authStateChanges();
 
   /// Sign in to the account by Email/Password
@@ -94,17 +95,15 @@ class Auth extends ChangeNotifier {
     notifyListeners();
   }
 
-
-
   /// Initialize the new user profile
-  Future<void> _initializeNewUser (String email) async {
+  Future<void> _initializeNewUser(String email) async {
     try {
       CollectionReference users = _firestore.collection('users');
       DocumentReference userRef = users.doc(currentUser?.uid);
       await userRef.set(
           UserModel(id: currentUser?.uid, name: 'Users $email', email: email)
               .toJson());
-    } catch (e){
+    } catch (e) {
       String input = e.toString();
       String substring = input.substring(input.indexOf("]") + 1);
       Fluttertoast.showToast(
@@ -136,7 +135,7 @@ class Auth extends ChangeNotifier {
       String input = e.toString();
       String substring = input.substring(input.indexOf("]") + 1);
       Fluttertoast.showToast(
-        msg: "Initialize Failed: $substring",
+        msg: "Update Failed: $substring",
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
         timeInSecForIosWeb: 2,
@@ -189,11 +188,6 @@ class Auth extends ChangeNotifier {
     }
   }
 
-
-
-
-
-
   /// Return the Current User's information
   Future<UserModel?> getUserInfo() async {
     try {
@@ -202,15 +196,20 @@ class Auth extends ChangeNotifier {
       var documentSnapshot = await userRef.get();
       return UserModel.fromSnapshot(documentSnapshot);
     } catch (e) {
-      String input = e.toString();
-      String substring = input.substring(input.indexOf("]") + 1);
-      Fluttertoast.showToast(
-        msg: "Fail to get user info: $substring",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 2,
-        fontSize: 16.0,
-      );
+      if (e.toString().contains("Null check operator used on a null value")) {
+        _initializeNewUser(currentUser!.email!);
+        getUserInfo();
+      } else {
+        String input = e.toString();
+        String substring = input.substring(input.indexOf("]") + 1);
+        Fluttertoast.showToast(
+          msg: "Fail to get user info: $substring",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 2,
+          fontSize: 16.0,
+        );
+      }
       return null;
     }
   }
