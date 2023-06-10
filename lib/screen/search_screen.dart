@@ -117,44 +117,41 @@ class _SearchScreenState extends State<SearchScreen> {
 
   /// The Component of View Recommendation Restaurants State
   Widget _buildRecommendedRestaurants() {
-    return Column(children: [
-      Expanded(
-        child: ListView.builder(
-          itemCount: _restaurants.length * 2 - 1,
-          itemBuilder: (context, index) {
-            bool isEven = index % 2 == 0;
-            if (isEven) {
-              final restaurant = _restaurants[index ~/ 2];
-              return SearchRestaurantButton(
-                restaurantModel: restaurant,
-              );
-            } else {
-              return const SectionDivider();
-            }
-          },
-        ),
-      ),
-    ]);
+    return ListView.builder(
+      itemCount:
+          _restaurants.length * 2 - 1 <= 0 ? 0 : _restaurants.length * 2 - 1,
+      itemBuilder: (context, index) {
+        bool isEven = index % 2 == 0;
+        if (isEven) {
+          final restaurant = _restaurants[index ~/ 2];
+          return SearchRestaurantButton(
+            restaurantModel: restaurant,
+          );
+        } else {
+          return const SectionDivider();
+        }
+      },
+    );
   }
 
   /// The Component of Search State
   Widget _buildSearchResults() {
     if (_searchResults.isEmpty) {
-      return Column(children: const [
-        Expanded(
-          child: Center(
-            child: TextHeadlineSmall(
-              text: 'No result found',
-            ),
+      return const Expanded(
+        child: Center(
+          child: TextHeadlineSmall(
+            text: 'No result found',
           ),
         ),
-      ]);
+      );
     }
 
     return Column(children: [
       Expanded(
         child: ListView.builder(
-          itemCount: _searchResults.length * 2 - 1,
+          itemCount: _searchResults.length * 2 - 1 <= 0
+              ? 0
+              : _searchResults.length * 2 - 1,
           itemBuilder: (context, index) {
             bool isEven = index % 2 == 0;
             if (isEven) {
