@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:food_truck_mobile/firebase/auth.dart';
+import 'package:food_truck_mobile/firebase/auth_manager.dart';
 import 'package:food_truck_mobile/icons/google_icon.dart';
 import 'package:food_truck_mobile/models/user_model.dart';
 import 'package:food_truck_mobile/screen/edit_profile_screen.dart';
 import 'package:food_truck_mobile/screen/register_screen.dart';
-import 'package:food_truck_mobile/widget/clickable_label.dart';
-import 'package:food_truck_mobile/widget/input_field.dart';
-import 'package:food_truck_mobile/widget/section_header_lr.dart';
+import 'package:food_truck_mobile/widget/components/clickable_label.dart';
+import 'package:food_truck_mobile/widget/components/input_field.dart';
+import 'package:food_truck_mobile/widget/dividers/section_header_lr.dart';
 import 'package:food_truck_mobile/widget/text.dart';
 import 'package:provider/provider.dart';
 import '../helper/constants.dart';
-import '../widget/bottom_navigation.dart';
-import '../widget/button.dart';
+import '../widget/components/bottom_navigation.dart';
+import '../widget/components/button.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 /// The [AccountScreen] of this app, it has two screens: User Information
@@ -39,14 +39,14 @@ class _AccountScreenState extends State<AccountScreen> {
   /// Build the page based on if currentUser has an instance
   @override
   Widget build(BuildContext context) {
-    Auth auth = context.watch<Auth>();
+    AuthManager auth = context.watch<AuthManager>();
     return auth.currentUser == null
         ? getLoginContent(auth)
         : getAccountProfile(auth);
   }
 
   /// Login State, Current Only Email/Password is supported
-  Widget getLoginContent(Auth auth) {
+  Widget getLoginContent(AuthManager auth) {
     return Scaffold(
         appBar: AppBar(
           title: const TextHeadlineSmall(
@@ -209,7 +209,7 @@ class _AccountScreenState extends State<AccountScreen> {
   /// The Implementation of this function has precondition that the current
   /// state has an currentUser instance.
   /// TODO: UI is not implemented
-  Widget getAccountProfile(Auth auth) {
+  Widget getAccountProfile(AuthManager auth) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('My Account'),

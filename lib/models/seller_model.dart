@@ -1,20 +1,16 @@
-/// The [UserModel]
-class UserModel {
+/// The [SellerModel]
+class SellerModel {
   String? id;
   String name;
   String phoneNumber;
   String email;
-  String avatar;
-  String address;
   double accountBalance;
 
-  UserModel({
+  SellerModel({
     required this.id,
     required this.name,
     this.phoneNumber = 'Click to set your phone number',
     required this.email,
-    this.avatar = 'images/UnknownUser.jpg',
-    this.address = 'Click to set your address',
     this.accountBalance = 0,
   });
 
@@ -24,22 +20,17 @@ class UserModel {
       "name": name,
       "phoneNumber": phoneNumber,
       "email": email,
-      "avatar": avatar,
-      "address": address,
-      "accountBalance": accountBalance
+      "accountBalance": accountBalance,
     };
   }
 
-  factory UserModel.fromSnapshot(
-      var document) {
+  factory SellerModel.fromSnapshot(var document) {
     final data = document.data();
-    return UserModel(
+    return SellerModel(
         id: document.id,
         name: data!["name"],
         phoneNumber: data!["phoneNumber"],
         email: data!["email"],
-        avatar: data!["avatar"],
-        address: data!["address"],
         accountBalance: data!["accountBalance"]);
   }
 }

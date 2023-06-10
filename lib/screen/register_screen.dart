@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../firebase/auth.dart';
+import '../firebase/auth_manager.dart';
 
 /// TODO: [RegisterScreen] UI not implemented yet.
 /// The [RegisterScreen] that allows user to register a new account
@@ -24,7 +24,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Auth auth = context.watch<Auth>();
+    AuthManager auth = context.watch<AuthManager>();
     if (auth.currentUser != null){
       setState(() {
         Navigator.of(context).pop();

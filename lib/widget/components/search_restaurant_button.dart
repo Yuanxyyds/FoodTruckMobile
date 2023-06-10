@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:food_truck_mobile/helper/constants.dart';
+import 'package:food_truck_mobile/models/restaurant_model.dart';
 import 'package:food_truck_mobile/screen/restaurant_menu_screen.dart';
-import 'package:food_truck_mobile/widget/home_restaurant_button.dart';
+import 'package:food_truck_mobile/widget/components/home_restaurant_button.dart';
+import 'package:food_truck_mobile/widget/decorations/close_tag.dart';
+import 'package:food_truck_mobile/widget/decorations/open_tag.dart';
 import 'package:food_truck_mobile/widget/text.dart';
 
 /// This is the Restaurant Button on the Home Screen, Slightly different UI than
@@ -10,15 +13,11 @@ import 'package:food_truck_mobile/widget/text.dart';
 class SearchRestaurantButton extends StatelessWidget {
   const SearchRestaurantButton(
       {super.key,
-      this.imageUrl,
-      required this.restaurantName,
-      required this.label,
-      required this.deliveryPrice,
-      required this.priceCategory});
+      this.deliveryPrice = -1,
+      this.priceCategory = 3,
+      required this.restaurantModel});
 
-  final String? imageUrl;
-  final String restaurantName;
-  final String label;
+  final RestaurantModel restaurantModel;
   final double
       deliveryPrice; // 0 Free Delivery, -1 not available, otherwise specified
   final int priceCategory; // 1-5
@@ -33,16 +32,8 @@ class SearchRestaurantButton extends StatelessWidget {
             PageRouteBuilder(
               pageBuilder: (context, animation, secondaryAnimation) =>
                   RestaurantMenuScreen(
-                      restaurantName: restaurantName,
-                      restaurantDescription: 'restaurantDescription',
-                      restaurantRating: 5.0,
-                      foodItems: const [
-                    'Food 1',
-                    'Food 2',
-                    'Food3',
-                    'Food4',
-                    'Food5'
-                  ]),
+                restaurantModel: restaurantModel,
+              ),
               transitionDuration: Duration.zero,
             ),
           );
@@ -54,7 +45,7 @@ class SearchRestaurantButton extends StatelessWidget {
               borderRadius: BorderRadius.circular(8)),
           child: Row(
             children: [
-              if (imageUrl == null)
+              if (restaurantModel.restaurantUrl == null)
                 Expanded(
                   flex: 2,
                   child: Container(
@@ -70,7 +61,7 @@ class SearchRestaurantButton extends StatelessWidget {
                     ),
                   ),
                 ),
-              if (imageUrl != null)
+              if (restaurantModel.restaurantUrl != null)
                 Expanded(
                   flex: 2,
                   child: Container(
@@ -78,8 +69,8 @@ class SearchRestaurantButton extends StatelessWidget {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8),
                       image: DecorationImage(
-                        image: NetworkImage(
-                          imageUrl!,
+                        image: AssetImage(
+                          restaurantModel.restaurantUrl,
                         ),
                         fit: BoxFit.fill,
                       ),
@@ -93,17 +84,27 @@ class SearchRestaurantButton extends StatelessWidget {
                   flex: 3,
                   child: Column(
                     children: [
-                      Align(
-                        alignment: Alignment.topLeft,
-                        child: TextTitleSmall(
-                          text: restaurantName,
-                          isBold: true,
-                        ),
+                      Row(
+                        children: [
+                          Align(
+                            alignment: Alignment.topLeft,
+                            child: TextTitleSmall(
+                              text: restaurantModel.name,
+                              isBold: true,
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 8,
+                          ),
+                          if (restaurantModel.isOpen) const OpenTag(),
+                          if (!(restaurantModel.isOpen)) const CloseTag(),
+                        ],
                       ),
                       Align(
                         alignment: Alignment.topLeft,
                         child: TextLabelSmall(
-                          text: label,
+                          maxLine: 2,
+                          text: restaurantModel.description!,
                           padding: const EdgeInsets.symmetric(
                             horizontal: 4,
                           ),
@@ -138,15 +139,12 @@ class _DeliveryPriceBar extends StatelessWidget {
       padding: const EdgeInsets.all(4.0),
       child: Row(
         children: [
-          const Expanded(
-              flex: 4,
-              child: Icon(
-                Icons.delivery_dining,
-              )),
-          const Expanded(flex: 2, child: SizedBox()),
+          const Icon(
+            Icons.delivery_dining,
+          ),
+          const SizedBox(width: 8,),
           if (deliveryPrice < 0)
             const Expanded(
-                flex: 16,
                 child: TextTitleSmall(
                   text: 'no delivery',
                   padding: EdgeInsets.fromLTRB(0, 2, 0, 0),
@@ -154,7 +152,6 @@ class _DeliveryPriceBar extends StatelessWidget {
                 )),
           if (deliveryPrice == 0)
             const Expanded(
-                flex: 16,
                 child: TextTitleSmall(
                   text: 'free delivery',
                   padding: EdgeInsets.fromLTRB(0, 2, 0, 0),
@@ -162,30 +159,25 @@ class _DeliveryPriceBar extends StatelessWidget {
                 )),
           if (deliveryPrice > 0)
             Expanded(
-                flex: 16,
                 child: TextTitleSmall(
-                  text: '\$ $deliveryPrice',
+                  text: '\$$deliveryPrice delivery',
                   padding: const EdgeInsets.fromLTRB(0, 2, 0, 0),
                   isBold: true,
                 )),
-          const Expanded(flex: 2, child: SizedBox()),
-          Expanded(
-              flex: 5,
-              child: Align(
-                  alignment: Alignment.centerRight,
-                  child: TextTitleSmall(
-                    text: '\$' * priceCategory,
-                    padding: const EdgeInsets.fromLTRB(0, 2, 0, 0),
-                    isBold: true,
-                  ))),
-          Expanded(
-              flex: 5,
+          const SizedBox(width: 8,),
+          Align(
+              alignment: Alignment.centerRight,
               child: TextTitleSmall(
-                text: '\$' * (5 - priceCategory),
-                color: Colors.grey,
+                text: '\$' * priceCategory,
                 padding: const EdgeInsets.fromLTRB(0, 2, 0, 0),
                 isBold: true,
               )),
+          TextTitleSmall(
+            text: '\$' * (5 - priceCategory),
+            color: Colors.grey,
+            padding: const EdgeInsets.fromLTRB(0, 2, 0, 0),
+            isBold: true,
+          ),
         ],
       ),
     );

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:food_truck_mobile/screen/order_detail_screen.dart';
-import '../widget/bottom_navigation.dart';
+import '../widget/components/bottom_navigation.dart';
 
 /// TODO: [OrderHistoryScreen] UI not implemented yet
 

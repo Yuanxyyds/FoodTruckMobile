@@ -1,22 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:food_truck_mobile/helper/constants.dart';
+import 'package:food_truck_mobile/models/restaurant_model.dart';
 import 'package:food_truck_mobile/screen/restaurant_menu_screen.dart';
+import 'package:food_truck_mobile/widget/decorations/open_tag.dart';
 import 'package:food_truck_mobile/widget/text.dart';
+import 'package:food_truck_mobile/widget/decorations/close_tag.dart';
 
 /// This is the Restaurant Button on the Home Screen, Slightly different UI than
 /// [SearchRestaurantButton]
 class HomeRestaurantButton extends StatelessWidget {
   const HomeRestaurantButton(
       {super.key,
-      this.imageUrl,
-      required this.restaurantName,
-      required this.label,
-      required this.deliveryPrice,
-      required this.priceCategory});
+      this.deliveryPrice = -1,
+      this.priceCategory = 2,
+      required this.restaurantModel});
 
-  final String? imageUrl;
-  final String restaurantName;
-  final String label;
+  final RestaurantModel restaurantModel;
   final double
       deliveryPrice; // 0 Free Delivery, -1 not available, otherwise specified
   final int priceCategory; // 1-5
@@ -28,17 +27,13 @@ class HomeRestaurantButton extends StatelessWidget {
         Navigator.of(context).push(
           PageRouteBuilder(
             pageBuilder: (context, animation, secondaryAnimation) =>
-                RestaurantMenuScreen(
-                    restaurantName: restaurantName,
-                    restaurantDescription: 'restaurantDescription',
-                    restaurantRating: 5.0,
-                    foodItems: const ['Food 1', 'Food 2']),
+                RestaurantMenuScreen(restaurantModel: restaurantModel,),
             transitionDuration: Duration.zero,
           ),
         );
       },
       child: Container(
-        width: 230,
+        width: 220,
         height: 160,
         decoration: BoxDecoration(
             color: Constants.whiteColor,
@@ -47,7 +42,7 @@ class HomeRestaurantButton extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
-              if (imageUrl == null)
+              if (restaurantModel.restaurantUrl == null)
                 Expanded(
                   child: Container(
                     width: 250,
@@ -62,15 +57,15 @@ class HomeRestaurantButton extends StatelessWidget {
                     ),
                   ),
                 ),
-              if (imageUrl != null)
+              if (restaurantModel.restaurantUrl != null)
                 Expanded(
                   child: Container(
                     width: 250,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8),
                       image: DecorationImage(
-                        image: NetworkImage(
-                          imageUrl!,
+                        image: AssetImage(
+                          restaurantModel.restaurantUrl,
                         ),
                         fit: BoxFit.fill,
                       ),
@@ -80,17 +75,26 @@ class HomeRestaurantButton extends StatelessWidget {
               Expanded(
                   child: Column(
                 children: [
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: TextTitleSmall(
-                      text: restaurantName,
-                      isBold: true,
-                    ),
+                  Row(
+                    children: [
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: TextTitleSmall(
+                          text: restaurantModel.name,
+                          isBold: true,
+                        ),
+                      ),
+                      const SizedBox(width: 8,),
+                      if (restaurantModel.isOpen)
+                        const OpenTag(),
+                      if (!(restaurantModel.isOpen))
+                        const CloseTag(),
+                    ],
                   ),
                   Align(
                     alignment: Alignment.centerLeft,
                     child: TextLabelSmall(
-                      text: label,
+                      text: restaurantModel.description!,
                       padding: const EdgeInsets.symmetric(
                         horizontal: 4,
                       ),
@@ -125,54 +129,51 @@ class _DeliveryPriceBar extends StatelessWidget {
       padding: const EdgeInsets.all(4.0),
       child: Row(
         children: [
-          const Expanded(
-              flex: 4,
-              child: Icon(
-                Icons.delivery_dining,
-              )),
-          const Expanded(flex: 2, child: SizedBox()),
+          const Icon(
+            Icons.delivery_dining,
+          ),
+          const SizedBox(width: 8,),
           if (deliveryPrice < 0)
             const Expanded(
-                flex: 16,
-                child: TextTitleSmall(
-                  text: 'no delivery',
-                  padding: EdgeInsets.fromLTRB(0, 2, 0, 0),
-                  isBold: true,
+                child: Center(
+                  child: TextTitleSmall(
+                    text: 'no delivery',
+                    padding: EdgeInsets.fromLTRB(0, 2, 0, 0),
+                    isBold: true,
+                  ),
                 )),
           if (deliveryPrice == 0)
             const Expanded(
-                flex: 16,
-                child: TextTitleSmall(
-                  text: 'free delivery',
-                  padding: EdgeInsets.fromLTRB(0, 2, 0, 0),
-                  isBold: true,
+                child: Center(
+                  child: TextTitleSmall(
+                    text: 'free delivery',
+                    padding: EdgeInsets.fromLTRB(0, 2, 0, 0),
+                    isBold: true,
+                  ),
                 )),
           if (deliveryPrice > 0)
             Expanded(
-                flex: 16,
-                child: TextTitleSmall(
-                  text: '\$ $deliveryPrice',
-                  padding: const EdgeInsets.fromLTRB(0, 2, 0, 0),
-                  isBold: true,
-                )),
-          const Expanded(flex: 2, child: SizedBox()),
-          Expanded(
-              flex: 5,
-              child: Align(
-                  alignment: Alignment.centerRight,
+                child: Center(
                   child: TextTitleSmall(
-                    text: '\$' * priceCategory,
+                    text: '\$$deliveryPrice delivery',
                     padding: const EdgeInsets.fromLTRB(0, 2, 0, 0),
                     isBold: true,
-                  ))),
-          Expanded(
-              flex: 5,
+                  ),
+                )),
+          SizedBox(width: 8,),
+          Align(
+              alignment: Alignment.centerRight,
               child: TextTitleSmall(
-                text: '\$' * (5 - priceCategory),
-                color: Colors.grey,
+                text: '\$' * priceCategory,
                 padding: const EdgeInsets.fromLTRB(0, 2, 0, 0),
                 isBold: true,
               )),
+          TextTitleSmall(
+            text: '\$' * (5 - priceCategory),
+            color: Colors.grey,
+            padding: const EdgeInsets.fromLTRB(0, 2, 0, 0),
+            isBold: true,
+          ),
         ],
       ),
     );

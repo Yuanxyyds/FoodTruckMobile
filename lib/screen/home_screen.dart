@@ -1,22 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:food_truck_mobile/helper/user_location.dart';
-import 'package:food_truck_mobile/widget/home_restaurant_button.dart';
-import 'package:food_truck_mobile/widget/map.dart';
-import 'package:food_truck_mobile/widget/section_header_tb.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:location/location.dart';
-import 'package:provider/provider.dart';
-import '../widget/bottom_navigation.dart';
-import '../widget/text.dart';
+import 'package:food_truck_mobile/firebase/restaurant_manager.dart';
+import 'package:food_truck_mobile/models/restaurant_model.dart';
+import 'package:food_truck_mobile/widget/components/home_restaurant_button.dart';
+import 'package:food_truck_mobile/widget/dividers/section_header_tb.dart';
+import 'package:food_truck_mobile/widget/components/bottom_navigation.dart';
+import 'package:food_truck_mobile/widget/text.dart';
 import 'map_screen.dart';
 
 /// The [HomeScreen] of the app
+/// TODO: Get Restaurant from FireStore
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    RestaurantManager restaurantManager = RestaurantManager();
     return Scaffold(
       appBar: AppBar(
         title: const TextHeadlineSmall(
@@ -48,89 +47,113 @@ class HomeScreen extends StatelessWidget {
               height: 16,
             ),
             // Section 1
-            const SectionHeaderTB(text: 'New on Food Truck'),
+            const SectionHeaderTB(text: 'Currently Open Food Truck'),
             SizedBox(
-              width: MediaQuery.of(context).size.width,
+              width: MediaQuery
+                  .of(context)
+                  .size
+                  .width,
               height: 200,
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 20),
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: const [
-                    HomeRestaurantButton(
-                      restaurantName: 'Restaurant 1',
-                      label: 'Chinese food',
-                      deliveryPrice: -1,
-                      priceCategory: 2,
-                    ),
-                    SizedBox(
-                      width: 20,
-                    ),
-                    HomeRestaurantButton(
-                      restaurantName: 'Restaurant 2',
-                      label: 'Korean food, Sandwich',
-                      deliveryPrice: 1.99,
-                      priceCategory: 2,
-                    )
-                  ],
+                child: FutureBuilder<List<RestaurantModel>?>(
+                  future: restaurantManager.getOpenRestaurant(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      if (snapshot.data!.isEmpty) {
+                        return const Center(child: TextHeadlineMedium(
+                            text: 'No Item!'));
+                      }
+                      List<Widget> content = [];
+                      for (var restaurantModel in snapshot.data!) {
+                        content.add(HomeRestaurantButton(
+                          restaurantModel: restaurantModel,));
+                        content.add(const SizedBox(
+                          width: 20,
+                        ));
+                      }
+                      return ListView(
+                        scrollDirection: Axis.horizontal,
+                        children: content,
+                      );
+                    } else {
+                      return const Center(child: CircularProgressIndicator(),);
+                    }
+                  },
                 ),
               ),
             ),
             // Section 2
-            const SectionHeaderTB(text: 'Popular Food Truck'),
+            const SectionHeaderTB(text: 'All Food Truck'),
             SizedBox(
-              width: MediaQuery.of(context).size.width,
+              width: MediaQuery
+                  .of(context)
+                  .size
+                  .width,
               height: 200,
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 20),
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: const [
-                    HomeRestaurantButton(
-                      restaurantName: 'Restaurant 1',
-                      label: 'Chinese food',
-                      deliveryPrice: -1,
-                      priceCategory: 2,
-                    ),
-                    SizedBox(
-                      width: 20,
-                    ),
-                    HomeRestaurantButton(
-                      restaurantName: 'Restaurant 2',
-                      label: 'Korean food, Sandwich',
-                      deliveryPrice: 1.99,
-                      priceCategory: 2,
-                    )
-                  ],
+                child: FutureBuilder<List<RestaurantModel>?>(
+                  future: restaurantManager.getAllRestaurant(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      if (snapshot.data!.isEmpty) {
+                        return const Center(child: TextHeadlineMedium(
+                            text: 'No Item!'));
+                      }
+                      List<Widget> content = [];
+                      for (var restaurantModel in snapshot.data!) {
+                        content.add(HomeRestaurantButton(
+                          restaurantModel: restaurantModel,));
+                        content.add(const SizedBox(
+                          width: 20,
+                        ));
+                      }
+                      return ListView(
+                        scrollDirection: Axis.horizontal,
+                        children: content,
+                      );
+                    } else {
+                      return const Center(child: CircularProgressIndicator(),);
+                    }
+                  },
                 ),
               ),
             ),
             // Section 3
-            const SectionHeaderTB(text: 'Besides Food Truck'),
+            const SectionHeaderTB(text: 'Still All FoodTruck for now :)'),
             SizedBox(
-              width: MediaQuery.of(context).size.width,
+              width: MediaQuery
+                  .of(context)
+                  .size
+                  .width,
               height: 200,
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 20),
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: const [
-                    HomeRestaurantButton(
-                      restaurantName: 'Restaurant 1',
-                      label: 'Chinese food',
-                      deliveryPrice: 0,
-                      priceCategory: 3,
-                    ),
-                    SizedBox(
-                      width: 20,
-                    ),
-                    HomeRestaurantButton(
-                      restaurantName: 'Restaurant 2',
-                      label: 'Korean food, Sandwich',
-                      deliveryPrice: 0.99,
-                      priceCategory: 2,
-                    )
-                  ],
+                child: FutureBuilder<List<RestaurantModel>?>(
+                  future: restaurantManager.getAllRestaurant(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      if (snapshot.data!.isEmpty) {
+                        return const Center(child: TextHeadlineMedium(
+                            text: 'No Item!'));
+                      }
+                      List<Widget> content = [];
+                      for (var restaurantModel in snapshot.data!) {
+                        content.add(HomeRestaurantButton(
+                          restaurantModel: restaurantModel,));
+                        content.add(const SizedBox(
+                          width: 20,
+                        ));
+                      }
+                      return ListView(
+                        scrollDirection: Axis.horizontal,
+                        children: content,
+                      );
+                    } else {
+                      return const Center(child: CircularProgressIndicator(),);
+                    }
+                  },
                 ),
               ),
             )

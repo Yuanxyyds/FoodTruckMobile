@@ -4,12 +4,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:food_truck_mobile/models/user_model.dart';
 
-/// The main Auth instance that stores the information of the current user
-class Auth extends ChangeNotifier {
+/// The main Auth instance (Provider) that stores the information of the
+/// current user
+class AuthManager extends ChangeNotifier {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   User? get currentUser => _firebaseAuth.currentUser;
+
   Stream<User?> get authStateChanges => _firebaseAuth.authStateChanges();
 
   /// Sign in to the account by Email/Password
@@ -94,17 +96,59 @@ class Auth extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Update Email
+  Future<bool> updateEmail(String newEmail) async {
+    try {
+      await FirebaseAuth.instance.currentUser?.updateEmail(newEmail);
+      notifyListeners();
+      return true;
+    } catch (e) {
+      String input = e.toString();
+      String substring = input.substring(input.indexOf("]") + 1);
+      Fluttertoast.showToast(
+        msg: "Failed to update email: $substring",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 2,
+        fontSize: 16.0,
+      );
+      return false;
+    }
+  }
 
+  /// Send a password Reset Email to User's email
+  Future<void> sendPasswordResetEmail(String email) async {
+    try {
+      await _firebaseAuth.sendPasswordResetEmail(email: email);
+      Fluttertoast.showToast(
+        msg: "A password reset email has sent!",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 2,
+        fontSize: 16.0,
+      );
+    } catch (e) {
+      String input = e.toString();
+      String substring = input.substring(input.indexOf("]") + 1);
+      Fluttertoast.showToast(
+        msg: "Failed to send reset email: $substring",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 2,
+        fontSize: 16.0,
+      );
+    }
+  }
 
   /// Initialize the new user profile
-  Future<void> _initializeNewUser (String email) async {
+  Future<void> _initializeNewUser(String email) async {
     try {
       CollectionReference users = _firestore.collection('users');
       DocumentReference userRef = users.doc(currentUser?.uid);
       await userRef.set(
           UserModel(id: currentUser?.uid, name: 'Users $email', email: email)
               .toJson());
-    } catch (e){
+    } catch (e) {
       String input = e.toString();
       String substring = input.substring(input.indexOf("]") + 1);
       Fluttertoast.showToast(
@@ -136,7 +180,7 @@ class Auth extends ChangeNotifier {
       String input = e.toString();
       String substring = input.substring(input.indexOf("]") + 1);
       Fluttertoast.showToast(
-        msg: "Initialize Failed: $substring",
+        msg: "Update Failed: $substring",
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
         timeInSecForIosWeb: 2,
@@ -145,54 +189,6 @@ class Auth extends ChangeNotifier {
       return false;
     }
   }
-
-  /// Update Email
-  Future<bool> updateEmail(String newEmail) async {
-    try {
-      await FirebaseAuth.instance.currentUser?.updateEmail(newEmail);
-      notifyListeners();
-      return true;
-    } catch (e) {
-      String input = e.toString();
-      String substring = input.substring(input.indexOf("]") + 1);
-      Fluttertoast.showToast(
-        msg: "Failed to update email: $substring",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 2,
-        fontSize: 16.0,
-      );
-      return false;
-    }
-  }
-
-  Future<void> sendPasswordResetEmail(String email) async {
-    try {
-      await _firebaseAuth.sendPasswordResetEmail(email: email);
-      Fluttertoast.showToast(
-        msg: "A password reset email has sent!",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 2,
-        fontSize: 16.0,
-      );
-    } catch (e) {
-      String input = e.toString();
-      String substring = input.substring(input.indexOf("]") + 1);
-      Fluttertoast.showToast(
-        msg: "Failed to send reset email: $substring",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 2,
-        fontSize: 16.0,
-      );
-    }
-  }
-
-
-
-
-
 
   /// Return the Current User's information
   Future<UserModel?> getUserInfo() async {
@@ -202,15 +198,20 @@ class Auth extends ChangeNotifier {
       var documentSnapshot = await userRef.get();
       return UserModel.fromSnapshot(documentSnapshot);
     } catch (e) {
-      String input = e.toString();
-      String substring = input.substring(input.indexOf("]") + 1);
-      Fluttertoast.showToast(
-        msg: "Fail to get user info: $substring",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 2,
-        fontSize: 16.0,
-      );
+      if (e.toString().contains("Null check operator used on a null value")) {
+        _initializeNewUser(currentUser!.email!);
+        getUserInfo();
+      } else {
+        String input = e.toString();
+        String substring = input.substring(input.indexOf("]") + 1);
+        Fluttertoast.showToast(
+          msg: "Fail to get user info: $substring",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 2,
+          fontSize: 16.0,
+        );
+      }
       return null;
     }
   }

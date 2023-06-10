@@ -1,22 +1,23 @@
 import 'package:flutter/material.dart';
+import '../../helper/constants.dart';
 
-import '../helper/constants.dart';
-
-class AdditionFood extends StatefulWidget {
+class AddTopping extends StatefulWidget {
   final String name;
   final double price;
+  final ValueChanged<bool> onSelectionChanged;
 
-  const AdditionFood({
+  const AddTopping({
     Key? key,
     required this.name,
     required this.price,
+    required this.onSelectionChanged,
   }) : super(key: key);
 
   @override
-  State<AdditionFood> createState() => _AdditionFoodState();
+  State<AddTopping> createState() => _AddToppingState();
 }
 
-class _AdditionFoodState extends State<AdditionFood> {
+class _AddToppingState extends State<AddTopping> {
   bool checked = false;
 
   @override
@@ -42,6 +43,7 @@ class _AdditionFoodState extends State<AdditionFood> {
                 onChanged: (bool? value) {
                   setState(() {
                     checked = value!;
+                    widget.onSelectionChanged(value);
                   });
                 },
               ),

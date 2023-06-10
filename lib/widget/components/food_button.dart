@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:food_truck_mobile/helper/constants.dart';
+import 'package:food_truck_mobile/models/food_model.dart';
 import 'package:food_truck_mobile/screen/food_detail_screen.dart';
 import 'package:food_truck_mobile/screen/restaurant_menu_screen.dart';
-import 'package:food_truck_mobile/widget/popular_tag.dart';
+import 'package:food_truck_mobile/widget/decorations/popular_tag.dart';
 import 'package:food_truck_mobile/widget/text.dart';
 
 /// This class contains a [FoodButton] that can be pressed to view the food's
@@ -10,16 +11,9 @@ import 'package:food_truck_mobile/widget/text.dart';
 class FoodButton extends StatelessWidget {
   const FoodButton(
       {super.key,
-      this.imageUrl,
-      required this.foodName,
-      required this.description,
-      required this.price,
-      this.isPopular = true});
+      this.isPopular = true, required this.foodModel});
 
-  final String? imageUrl;
-  final String foodName;
-  final String description;
-  final double price;
+  final FoodModel foodModel;
   final bool isPopular;
 
   @override
@@ -32,17 +26,14 @@ class FoodButton extends StatelessWidget {
             PageRouteBuilder(
               pageBuilder: (context, animation, secondaryAnimation) =>
                   FoodDetailScreen(
-                      imageUrl: imageUrl,
-                      foodName: foodName,
-                      description: description,
-                      price: price,
+                      foodModel: foodModel,
                       isPopular: isPopular),
               transitionDuration: Duration.zero,
             ),
           );
         },
         child: Container(
-          height: 110,
+          height: 100,
           decoration: BoxDecoration(
               color: Colors.transparent,
               borderRadius: BorderRadius.circular(8)),
@@ -55,40 +46,40 @@ class FoodButton extends StatelessWidget {
                     Align(
                       alignment: Alignment.topLeft,
                       child: TextTitleSmall(
-                        text: foodName,
+                        text: foodModel.name,
                         isBold: true,
                       ),
                     ),
-                    Align(
-                      alignment: Alignment.topLeft,
-                      child: TextLabelSmall(
-                        text: description,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 4,
+                    Expanded(
+                      child: Align(
+                        alignment: Alignment.topLeft,
+                        child: TextLabelSmall(
+                          text: foodModel.description,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 4,
+                          ),
+                          maxLine: 3,
                         ),
-                        maxLine: 3,
                       ),
                     ),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 2, 0, 0),
-                        child: Row(
-                          children: [
-                            Expanded(
-                                child: TextTitleSmall(
-                              text: '\$ $price',
-                              isBold: true,
-                            )),
-                            if (isPopular) const PopularTag(),
-                          ],
-                        ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 2, 0, 0),
+                      child: Row(
+                        children: [
+                          Expanded(
+                              child: TextTitleSmall(
+                            text: '\$ ${foodModel.price}',
+                            isBold: true,
+                          )),
+                          if (isPopular) const PopularTag(),
+                        ],
                       ),
                     ),
                   ],
                 ),
               ),
               const SizedBox(width: 8,),
-              if (imageUrl == null)
+              if (foodModel.foodUrl == null)
                 Expanded(
                   flex: 1,
                   child: Container(
@@ -104,16 +95,16 @@ class FoodButton extends StatelessWidget {
                     ),
                   ),
                 ),
-              if (imageUrl != null)
+              if (foodModel.foodUrl != null)
                 Expanded(
-                  flex: 2,
+                  flex: 1,
                   child: Container(
                     height: 125,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8),
                       image: DecorationImage(
-                        image: NetworkImage(
-                          imageUrl!,
+                        image: AssetImage(
+                          foodModel.foodUrl,
                         ),
                         fit: BoxFit.fill,
                       ),

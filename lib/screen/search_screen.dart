@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:food_truck_mobile/widget/home_restaurant_button.dart';
-import 'package:food_truck_mobile/widget/input_field.dart';
-import 'package:food_truck_mobile/widget/section_divider.dart';
+import 'package:food_truck_mobile/firebase/restaurant_manager.dart';
+import 'package:food_truck_mobile/models/food_model.dart';
+import 'package:food_truck_mobile/models/restaurant_model.dart';
+import 'package:food_truck_mobile/widget/components/home_restaurant_button.dart';
+import 'package:food_truck_mobile/widget/components/input_field.dart';
+import 'package:food_truck_mobile/widget/dividers/section_divider.dart';
 import 'package:food_truck_mobile/widget/text.dart';
 
-import '../widget/bottom_navigation.dart';
-import '../widget/search_restaurant_button.dart';
+import '../widget/components/bottom_navigation.dart';
+import '../widget/components/search_restaurant_button.dart';
 
 /// The [SearchScreen] of the App, it contains two states: View Recommendation
 /// State when the search bar is not clicked, Search State when the search bar
-/// is clicked
+/// is clicked TODO: Get instance from firestore
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -22,33 +25,43 @@ class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController _searchController = TextEditingController();
   bool _isSearching = false;
   final FocusNode _textFieldFocusNode = FocusNode();
-  final List<String> _recommendedRestaurants = [
-    'Restaurant A',
-    'Restaurant B',
-    'Starbucks',
-    'McDonald',
-    'KFC',
-  ];
-  List<String> _searchResults = [];
+  List<RestaurantModel> _searchResults = [];
+  List<RestaurantModel> _restaurants = [];
 
   @override
   void dispose() {
+    _textFieldFocusNode.dispose();
     _searchController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    RestaurantManager restaurantManager = RestaurantManager();
     return Scaffold(
-        bottomNavigationBar: const BottomNavigation(
-          currentIndex: 1,
-        ),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
-          child: _isSearching
-              ? _buildSearchResults()
-              : _buildRecommendedRestaurants(),
-        ));
+      bottomNavigationBar: const BottomNavigation(
+        currentIndex: 1,
+      ),
+      appBar: _appBar(),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+        child: _isSearching
+            ? _buildSearchResults()
+            : FutureBuilder<List<RestaurantModel>?>(
+                future: restaurantManager.getAllRestaurant(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    _restaurants = snapshot.data!;
+                    return _buildRecommendedRestaurants();
+                  } else {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                },
+              ),
+      ),
+    );
   }
 
   /// The Action to filter restaurant based on user input
@@ -56,75 +69,65 @@ class _SearchScreenState extends State<SearchScreen> {
     setState(() {
       _searchResults.clear();
       if (query.isNotEmpty) {
-        // Perform search logic here, e.g., query the database or API
-        // and update _searchResults list accordingly
-        _searchResults = _recommendedRestaurants
+        _searchResults = _restaurants
             .where((restaurant) =>
-                restaurant.toLowerCase().contains(query.toLowerCase()))
+                restaurant.name.toLowerCase().contains(query.toLowerCase()))
             .toList();
       }
     });
   }
 
   /// The Searching Bar, it has two different UI in two different states
-  Widget _appBar() {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 20, 0, 5),
-      child: Row(
-        children: [
-          Expanded(
-            flex: 8,
-            child: InputField(
-              focusNode: _textFieldFocusNode,
-              labelText: 'Search for restaurant',
-              prefixIcon: const Icon(Icons.search),
-              controller: _searchController,
-              onChange: _search,
-              onTap: () {
-                setState(() {
-                  if (!_isSearching) {
-                    _isSearching = !_isSearching;
-                  }
-                });
-              },
-            ),
-          ),
-          if (_isSearching)
-            Expanded(
-              flex: 1,
-              child: IconButton(
-                icon: const Icon(Icons.close),
-                onPressed: () {
-                  setState(() {
-                    _isSearching = !_isSearching;
-                    _searchResults.clear();
-                    _searchController.clear();
-                    _textFieldFocusNode.unfocus();
-                  });
-                },
-              ),
-            ),
-        ],
+  AppBar _appBar() {
+    return AppBar(
+      toolbarHeight: 80,
+      title: Padding(
+        padding: const EdgeInsets.only(bottom: 5.0),
+        child: InputField(
+          labelText: 'Search for restaurant',
+          prefixIcon: const Icon(Icons.search),
+          focusNode: _textFieldFocusNode,
+          controller: _searchController,
+          onChange: _search,
+          onTap: () {
+            setState(() {
+              if (!_isSearching) {
+                _isSearching = !_isSearching;
+              }
+            });
+          },
+        ),
       ),
+      actions: [
+        if (_isSearching)
+          IconButton(
+            icon: const Icon(Icons.close),
+            onPressed: () {
+              setState(() {
+                _isSearching = !_isSearching;
+                _searchResults.clear();
+                _searchController.clear();
+                _textFieldFocusNode.unfocus();
+              });
+            },
+          ),
+      ],
     );
   }
 
   /// The Component of View Recommendation Restaurants State
   Widget _buildRecommendedRestaurants() {
     return Column(children: [
-      _appBar(),
       Expanded(
         child: ListView.builder(
-          itemCount: _recommendedRestaurants.length * 2 - 1,
+          itemCount: _restaurants.length * 2 - 1,
           itemBuilder: (context, index) {
             bool isEven = index % 2 == 0;
             if (isEven) {
-              final restaurant = _recommendedRestaurants[index ~/ 2];
+              final restaurant = _restaurants[index ~/ 2];
               return SearchRestaurantButton(
-                  restaurantName: restaurant,
-                  label: 'label',
-                  deliveryPrice: -1,
-                  priceCategory: 2);
+                restaurantModel: restaurant,
+              );
             } else {
               return const SectionDivider();
             }
@@ -137,9 +140,8 @@ class _SearchScreenState extends State<SearchScreen> {
   /// The Component of Search State
   Widget _buildSearchResults() {
     if (_searchResults.isEmpty) {
-      return Column(children: [
-        _appBar(),
-        const Expanded(
+      return Column(children: const [
+        Expanded(
           child: Center(
             child: TextHeadlineSmall(
               text: 'No result found',
@@ -150,7 +152,6 @@ class _SearchScreenState extends State<SearchScreen> {
     }
 
     return Column(children: [
-      _appBar(),
       Expanded(
         child: ListView.builder(
           itemCount: _searchResults.length * 2 - 1,
@@ -159,10 +160,8 @@ class _SearchScreenState extends State<SearchScreen> {
             if (isEven) {
               final restaurant = _searchResults[index ~/ 2];
               return SearchRestaurantButton(
-                  restaurantName: restaurant,
-                  label: 'label',
-                  deliveryPrice: -1,
-                  priceCategory: 2);
+                restaurantModel: restaurant,
+              );
             } else {
               return const SectionDivider();
             }

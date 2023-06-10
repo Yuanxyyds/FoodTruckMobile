@@ -11,6 +11,6 @@ class PopularTag extends StatelessWidget {
         decoration: const BoxDecoration(
           color: Colors.yellow,
             borderRadius: BorderRadius.all(Radius.circular(15))),
-        child: const TextLabelSmall(text: 'popular'));
+        child: const Center(child: TextLabelSmall(text: 'popular')));
   }
 }
