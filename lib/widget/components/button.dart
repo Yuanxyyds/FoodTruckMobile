@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'text.dart';
+import '../text.dart';
 
 /// This class contains the [TextButton] for the entire app
 class Button extends StatelessWidget {

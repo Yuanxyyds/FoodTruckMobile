@@ -3,12 +3,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:location/location.dart';
 
+/// The main UserLocation instance (Provider) that stores the user's location
+/// information
 class UserLocation extends ChangeNotifier {
   final Location _location = Location();
   LocationData? _currentLocation;
 
   LocationData? get currentUserLocation => _currentLocation;
 
+  /// check the current Location setting, send a request if location disabled
+  /// and send an update Location request if location is enabled
   Future<void> requestCurrentLocation() async {
     Location location = Location();
     PermissionStatus permissionStatus;
@@ -39,6 +43,7 @@ class UserLocation extends ChangeNotifier {
     }
   }
 
+  /// Send a location enable request, update the location when enabled
   Future<void> _requestLocationPermission() async {
     Location location = Location();
     PermissionStatus permissionStatus;
@@ -70,6 +75,7 @@ class UserLocation extends ChangeNotifier {
     }
   }
 
+  /// Update the location
   Future<void> _updateLocation() async {
     try {
       LocationData location = await _location.getLocation();

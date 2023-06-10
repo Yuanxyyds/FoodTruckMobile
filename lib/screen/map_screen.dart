@@ -5,6 +5,8 @@ import 'package:provider/provider.dart';
 import '../helper/user_location.dart';
 
 
+/// A [MapScreen] that shows the location of current User
+/// TODO: in the future also shows FT's location
 class MapScreen extends StatelessWidget {
   const MapScreen({
     super.key,

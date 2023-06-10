@@ -1,5 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 /// The [FoodModel]
 class FoodModel {
   String? id;
@@ -8,6 +6,7 @@ class FoodModel {
   double price;
   String foodUrl;
   Map<String, double> topping;
+  String sectionId;
 
   FoodModel({
     required this.id,
@@ -16,14 +15,15 @@ class FoodModel {
     required this.price,
     this.foodUrl = 'images/DefaultRestaurantImage.jpeg',
     this.topping = const <String, double>{},
+    required this.sectionId,
   });
 
-  void addTopping(String name, double price){
-    topping?['name'] = price;
+  void addOrUpdateTopping(String name, double price) {
+    topping[name] = price;
   }
 
-  void removeTopping(String name){
-    topping?.remove('name');
+  void removeTopping(String name) {
+    topping.remove(name);
   }
 
 
@@ -35,19 +35,25 @@ class FoodModel {
       "price": price,
       "foodUrl": foodUrl,
       'topping': topping,
+      'sectionId': sectionId,
     };
     return jsonMap;
   }
 
   factory FoodModel.fromSnapshot(var document) {
     final data = document.data();
+    Map<String, double> topping = <String, double>{};
+    data!['topping'].keys.forEach((item) {
+      topping[item] = double.tryParse(data!['topping'][item].toString()) ?? 0.0;
+    });
     return FoodModel(
-        id: document.id,
-        name: data!["name"],
-        description: data!["description"],
-        price: data!["price"],
-        foodUrl: data!["foodUrl"],
-        topping: data!['toppings'],
+    id: document.id,
+    name: data!["name"],
+    description: data!["description"],
+    price: data!["price"],
+    foodUrl: data!["foodUrl"],
+    topping: topping,
+    sectionId: data!['sectionId'],
     );
   }
 }

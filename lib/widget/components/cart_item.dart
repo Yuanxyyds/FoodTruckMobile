@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:food_truck_mobile/widget/section_divider.dart';
+import 'package:food_truck_mobile/widget/dividers/section_divider.dart';
 import 'package:food_truck_mobile/widget/text.dart';
 
 class CartItem extends StatefulWidget {

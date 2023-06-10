@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:food_truck_mobile/widget/button.dart';
-import 'package:food_truck_mobile/widget/cart_item.dart';
-import 'package:food_truck_mobile/widget/checkout_item.dart';
-import 'package:food_truck_mobile/widget/section_divider.dart';
+import 'package:food_truck_mobile/widget/components/button.dart';
+import 'package:food_truck_mobile/widget/components/cart_item.dart';
+import 'package:food_truck_mobile/widget/components/checkout_item.dart';
+import 'package:food_truck_mobile/widget/dividers/section_divider.dart';
 import 'package:food_truck_mobile/widget/text.dart';
 
 import '../helper/constants.dart';
 
+/// TODO: Add OrderItem Model in the future
 class ShoppingCart extends StatelessWidget {
   final List<List> cartItems;
 
