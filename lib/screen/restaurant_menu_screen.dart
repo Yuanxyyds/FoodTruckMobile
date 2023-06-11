@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:food_truck_mobile/providers/firebase/food_manager.dart';
 import 'package:food_truck_mobile/providers/firebase/section_manager.dart';
@@ -7,6 +5,7 @@ import 'package:food_truck_mobile/models/food_model.dart';
 import 'package:food_truck_mobile/models/restaurant_model.dart';
 import 'package:food_truck_mobile/models/section_model.dart';
 import 'package:food_truck_mobile/providers/shoping_cart_provider.dart';
+import 'package:food_truck_mobile/screen/checkout_screen.dart';
 import 'package:food_truck_mobile/screen/shopping_cart_screen.dart';
 import 'package:food_truck_mobile/widget/components/food_button.dart';
 import 'package:food_truck_mobile/widget/dividers/section_header_tb.dart';
@@ -120,13 +119,23 @@ class RestaurantMenuScreen extends StatelessWidget {
               ),
               Expanded(
                   child: SizedBox(
-                height: 45,
+                height: 45.0,
                 child: Button(
                   text: "Checkout",
                   textColor: Colors.white,
                   backgroundColor: Constants.primaryColor,
                   takeLeastSpace: true,
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      PageRouteBuilder(
+                        pageBuilder: (context, animation, secondaryAnimation) =>
+                            CheckoutScreen(
+                          restaurantName: restaurantModel.name,
+                        ),
+                        transitionDuration: Duration.zero,
+                      ),
+                    );
+                  },
                 ),
               ))
             ],
