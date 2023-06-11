@@ -6,6 +6,8 @@ import 'package:food_truck_mobile/screen/edit_profile_screen.dart';
 import 'package:food_truck_mobile/screen/register_screen.dart';
 import 'package:food_truck_mobile/widget/components/clickable_label.dart';
 import 'package:food_truck_mobile/widget/components/input_field.dart';
+import 'package:food_truck_mobile/widget/components/profile_row.dart';
+import 'package:food_truck_mobile/widget/dividers/section_divider.dart';
 import 'package:food_truck_mobile/widget/dividers/section_header_lr.dart';
 import 'package:food_truck_mobile/widget/text.dart';
 import 'package:provider/provider.dart';
@@ -214,14 +216,14 @@ class _AccountScreenState extends State<AccountScreen> {
       appBar: AppBar(
         title: const Text('My Account'),
       ),
+      bottomNavigationBar: const BottomNavigation(
+        currentIndex: 3,
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           await auth.signOut();
         },
         child: const Icon(Icons.remove),
-      ),
-      bottomNavigationBar: const BottomNavigation(
-        currentIndex: 3,
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
@@ -242,9 +244,20 @@ class _AccountScreenState extends State<AccountScreen> {
                       ),
                     ),
                     Center(
-                      child: ClickableLabel(
-                        text: 'edit',
-                        onTap: () {
+                        child: TextTitleLarge(
+                      text: userData.name,
+                      isBold: true,
+                    )),
+                    const SizedBox(
+                      height: 10.0,
+                    ),
+                    Center(
+                      child: Button(
+                        text: 'Edit Profile',
+                        textColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(horizontal: 40.0),
+                        takeLeastSpace: true,
+                        onPressed: () {
                           setState(() {
                             Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) => EditProfileScreen(
@@ -254,35 +267,32 @@ class _AccountScreenState extends State<AccountScreen> {
                         },
                       ),
                     ),
-                    const SizedBox(height: 16.0),
-                    Text(
-                      userData.name, // Replace with the user's name
-                      style:
-                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                    const SizedBox(
+                      height: 30.0,
                     ),
-                    const SizedBox(height: 8.0),
-                    Text(
-                      userData.email, // Replace with the user's email
-                      style: TextStyle(fontSize: 16, color: Colors.grey),
+                    ProfileRow(
+                      icon: Icons.phone,
+                      info: userData.phoneNumber,
                     ),
-                    const SizedBox(height: 16.0),
-                    ListTile(
-                      leading: const Icon(Icons.phone),
-                      title: Text(userData.phoneNumber),
-                      // Replace with the user's phone number
-                      onTap: () {
-                        // Handle phone number tap
+                    ProfileRow(icon: Icons.mail_outline, info: userData.email),
+                    ProfileRow(icon: Icons.pin_drop, info: userData.address),
+                    const SectionDivider(
+                      padding: EdgeInsets.only(
+                          left: 15.0, right: 15.0, bottom: 25.0),
+                    ),
+                    ProfileRow(
+                        icon: Icons.account_balance_wallet,
+                        info: userData.accountBalance.toStringAsFixed(2)),
+                    GestureDetector(
+                      onTap: () async {
+                        await auth.signOut();
                       },
-                    ),
-                    ListTile(
-                      leading: const Icon(Icons.location_on),
-                      title: Text(userData.address),
-                      // Replace with the user's location
-                      onTap: () {
-                        // Handle location tap
-                      },
-                    ),
-                    // Add more user information as needed
+                      child: const ProfileRow(
+                        icon: Icons.logout,
+                        info: "Log out",
+                        secondary: true,
+                      ),
+                    )
                   ],
                 );
               }
