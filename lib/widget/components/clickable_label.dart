@@ -15,20 +15,30 @@ class ClickableLabel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Color textColor = color ?? Theme.of(context).primaryColor;
 
     TextStyle defaultTextStyle = TextStyle(
-      decoration: TextDecoration.underline,
-      color: color ?? Theme.of(context).primaryColor,
+      color: textColor,
     );
 
     return GestureDetector(
       onTap: onTap,
-      child: Text(
-        text,
-        style: Theme.of(context)
-            .textTheme
-            .apply(displayColor: Theme.of(context).colorScheme.onSurface)
-            .labelLarge!.merge(defaultTextStyle),
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          border: Border(
+            bottom: BorderSide(
+              color: textColor,
+            ),
+          ),
+        ),
+        child: Text(
+          text,
+          style: Theme.of(context)
+              .textTheme
+              .apply(displayColor: Theme.of(context).colorScheme.onSurface)
+              .labelLarge!
+              .merge(defaultTextStyle),
+        ),
       ),
     );
   }

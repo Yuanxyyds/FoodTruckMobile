@@ -44,19 +44,6 @@ class _MapWidgetState extends State<MapWidget> {
         ),
       },
     );
-    data.add({
-      'id': '1',
-      'globalKey': GlobalKey(),
-      'position': LatLng(widget.currentUserLocation.latitude! + 0.005,
-          widget.currentUserLocation.longitude! + 0.005),
-      'widget': const Center(
-        child: CircleAvatar(
-          radius: 40,
-          backgroundImage: AssetImage('images/UnknownUser.jpg'),
-        ),
-      ),
-    }
-    );
     WidgetsBinding.instance?.addPostFrameCallback((_) => _onBuildCompleted());
   }
 
@@ -103,6 +90,7 @@ class _MapWidgetState extends State<MapWidget> {
   }
 
   Future<Marker> _generateMarkersFromWidgets(Map<String, dynamic> data) async {
+    await Future.delayed(const Duration(milliseconds: 50));
     BuildContext? context = data['globalKey'].currentContext;
     RenderRepaintBoundary boundary =
         context?.findRenderObject() as RenderRepaintBoundary;

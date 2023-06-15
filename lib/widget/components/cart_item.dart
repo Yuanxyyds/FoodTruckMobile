@@ -1,35 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:food_truck_mobile/models/order_item_model.dart';
+import 'package:food_truck_mobile/providers/shoping_cart_provider.dart';
 import 'package:food_truck_mobile/widget/dividers/section_divider.dart';
 import 'package:food_truck_mobile/widget/text.dart';
 
-class CartItem extends StatefulWidget {
-  final String itemName;
-  final double itemPrice;
-  final int count;
+class CartItem extends StatelessWidget {
+  final OrderItemModel orderItemModel;
+  final ShoppingCartProvider shoppingCartProvider;
 
-  const CartItem(
-      {Key? key,
-      required this.itemName,
-      required this.itemPrice,
-      required this.count})
-      : super(key: key);
-
-  @override
-  State<CartItem> createState() => _CartItemState();
-}
-
-class _CartItemState extends State<CartItem> {
-  int count = 1;
-
-  @override
-  void initState() {
-    super.initState();
-    count = widget.count;
-  }
+  const CartItem({
+    Key? key,
+    required this.orderItemModel,
+    required this.shoppingCartProvider,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    Color removeColor = count == 1 ? Colors.grey : Colors.black;
+    Color removeColor =
+        orderItemModel.quantity == 1 ? Colors.grey : Colors.black;
 
     return Column(
       children: [
@@ -37,11 +25,12 @@ class _CartItemState extends State<CartItem> {
           children: [
             Expanded(
                 child: TextTitleMedium(
-              text: widget.itemName,
+              text: orderItemModel.foodName,
               isBold: true,
             )),
             TextTitleMedium(
-              text: '\$ ${widget.itemPrice.toStringAsFixed(2)}',
+              text:
+                  '\$ ${(orderItemModel.singleItemPrice * orderItemModel.quantity).toStringAsFixed(2)}',
               padding: EdgeInsets.zero,
             ),
           ],
@@ -65,9 +54,11 @@ class _CartItemState extends State<CartItem> {
                 children: [
                   IconButton(
                     onPressed: () {
-                      setState(() {
-                        count = count > 1 ? count - 1 : 1;
-                      });
+                      shoppingCartProvider.removeOrderItem(orderItemModel);
+                      orderItemModel.quantity = orderItemModel.quantity > 1
+                          ? orderItemModel.quantity - 1
+                          : 1;
+                      shoppingCartProvider.addOrderItem(orderItemModel);
                     },
                     icon: Icon(
                       Icons.remove,
@@ -75,14 +66,14 @@ class _CartItemState extends State<CartItem> {
                     ),
                   ),
                   Text(
-                    count.toString(),
+                    orderItemModel.quantity.toString(),
                     style: const TextStyle(fontSize: 20),
                   ),
                   IconButton(
                     onPressed: () {
-                      setState(() {
-                        count += 1;
-                      });
+                      shoppingCartProvider.removeOrderItem(orderItemModel);
+                      orderItemModel.quantity = orderItemModel.quantity + 1;
+                      shoppingCartProvider.addOrderItem(orderItemModel);
                     },
                     icon: const Icon(
                       Icons.add,

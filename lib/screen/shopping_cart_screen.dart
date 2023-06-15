@@ -1,27 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:food_truck_mobile/models/order_item_model.dart';
+import 'package:food_truck_mobile/providers/shoping_cart_provider.dart';
 import 'package:food_truck_mobile/widget/components/button.dart';
 import 'package:food_truck_mobile/widget/components/cart_item.dart';
-import 'package:food_truck_mobile/widget/components/checkout_item.dart';
+import 'package:food_truck_mobile/widget/components/name_price_row.dart';
 import 'package:food_truck_mobile/widget/dividers/section_divider.dart';
 import 'package:food_truck_mobile/widget/text.dart';
+import 'package:provider/provider.dart';
 
 import '../helper/constants.dart';
 
 /// TODO: Add OrderItem Model in the future
 class ShoppingCart extends StatelessWidget {
-  final List<List> cartItems;
-
-  // cartItems should be passed in, this is only for UI purposes
-  const ShoppingCart(
-      {Key? key,
-      this.cartItems = const [
-        ["Artichoke Sandwich", 7.50, 2],
-        ["Egg Sandwich", 5.70, 1]
-      ]})
-      : super(key: key);
+  const ShoppingCart({super.key});
 
   @override
   Widget build(BuildContext context) {
+    ShoppingCartProvider shoppingCartProvider =
+        context.watch<ShoppingCartProvider>();
     return Scaffold(
         appBar: AppBar(
           title: const Text("Shopping cart"),
@@ -36,12 +32,14 @@ class ShoppingCart extends StatelessWidget {
                   isBold: true,
                 ),
                 const SectionDivider(),
-                ..._getContent(),
-                const CheckoutItem(name: "Subtotal", price: 7.50),
-                const CheckoutItem(name: "Delivery costs", price: 3.26),
-                const CheckoutItem(
+                ..._getContent(shoppingCartProvider),
+                NamePriceRow(
+                    name: "Subtotal",
+                    price: shoppingCartProvider.getTotalCost()),
+                const NamePriceRow(name: "Delivery costs", price: 0.00),
+                NamePriceRow(
                   name: "Total",
-                  price: 10.26,
+                  price: shoppingCartProvider.getTotalCost(),
                   isBold: true,
                 ),
                 const SizedBox(
@@ -69,13 +67,13 @@ class ShoppingCart extends StatelessWidget {
         ));
   }
 
-  List<Widget> _getContent() {
+  List<Widget> _getContent(ShoppingCartProvider shoppingCartProvider) {
     List<Widget> content = [];
-    for (var element in cartItems) {
+    List<OrderItemModel> cartItems = shoppingCartProvider.orderItems;
+    for (var orderItem in cartItems) {
       content.add(CartItem(
-        itemName: element[0],
-        itemPrice: element[1],
-        count: element[2],
+        shoppingCartProvider: shoppingCartProvider,
+        orderItemModel: orderItem,
       ));
     }
 
