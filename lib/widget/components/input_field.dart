@@ -7,7 +7,7 @@ class InputField extends StatelessWidget {
   InputField({
     super.key,
     required this.labelText,
-    required this.prefixIcon,
+    this.prefixIcon,
     this.controller,
     this.onChange,
     this.onTap,
@@ -18,7 +18,7 @@ class InputField extends StatelessWidget {
   });
 
   final String labelText;
-  final Widget prefixIcon;
+  final Widget? prefixIcon;
   final TextEditingController? controller;
   final ValueSetter<String>? onChange;
   final VoidCallback? onTap;

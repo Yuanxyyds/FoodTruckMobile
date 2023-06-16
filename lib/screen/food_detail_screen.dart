@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:food_truck_mobile/models/food_model.dart';
+import 'package:food_truck_mobile/models/order_item_model.dart';
+import 'package:food_truck_mobile/providers/shoping_cart_provider.dart';
 import 'package:food_truck_mobile/widget/components/add_topping.dart';
 import 'package:food_truck_mobile/widget/components/button.dart';
 import 'package:food_truck_mobile/widget/text.dart';
 import 'package:food_truck_mobile/helper/constants.dart';
 import 'package:food_truck_mobile/widget/decorations/popular_tag.dart';
 import 'package:food_truck_mobile/widget/dividers/section_divider.dart';
+import 'package:provider/provider.dart';
 
 /// The [FoodDetailScreen] that shows the detailed information of the food, and
 /// topping options
 class FoodDetailScreen extends StatefulWidget {
   final FoodModel foodModel;
   final bool isPopular;
-
 
   const FoodDetailScreen({
     Key? key,
@@ -38,6 +40,8 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
   @override
   Widget build(BuildContext context) {
     Color removeColor = count == 1 ? Colors.grey : Colors.black;
+    ShoppingCartProvider shoppingCartProvider =
+    context.read<ShoppingCartProvider>();
 
     return Scaffold(
         appBar: AppBar(
@@ -90,7 +94,7 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                         alignment: Alignment.topRight,
                         child: TextTitleMedium(
                           text:
-                              '\$ ${widget.foodModel.price.toStringAsFixed(2)}',
+                          '\$ ${widget.foodModel.price.toStringAsFixed(2)}',
                           isBold: true,
                           padding: EdgeInsets.zero,
                         )),
@@ -188,7 +192,16 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                         textColor: Colors.white,
                         backgroundColor: Constants.primaryColor,
                         takeLeastSpace: true,
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                          OrderItemModel orderItemModel = OrderItemModel(
+                              foodName: widget.foodModel.name,
+                              foodId: widget.foodModel.id!,
+                              singleItemPrice: singleItemTotal,
+                              toppings: selectedToppings,
+                              quantity: count);
+                          shoppingCartProvider.addOrderItem(orderItemModel);
+                        },
                       ))
                 ],
               ),
@@ -207,12 +220,14 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
         onSelectionChanged: (bool value) {
           if (value) {
             setState(() {
-              singleItemTotal = singleItemTotal + widget.foodModel.topping[element]!;
+              singleItemTotal =
+                  singleItemTotal + widget.foodModel.topping[element]!;
               selectedToppings.add(element);
             });
           } else {
             setState(() {
-              singleItemTotal = singleItemTotal - widget.foodModel.topping[element]!;
+              singleItemTotal =
+                  singleItemTotal - widget.foodModel.topping[element]!;
               selectedToppings.remove(element);
             });
           }

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:food_truck_mobile/firebase/auth_manager.dart';
+import 'package:food_truck_mobile/providers/firebase/auth_manager.dart';
 import 'package:food_truck_mobile/icons/google_icon.dart';
 import 'package:food_truck_mobile/models/user_model.dart';
-import 'package:food_truck_mobile/screen/edit_profile_screen.dart';
+import 'package:food_truck_mobile/screen/profile_screens/edit_profile_screen.dart';
+import 'package:food_truck_mobile/screen/profile_screens/set_address_map_screen.dart';
 import 'package:food_truck_mobile/screen/register_screen.dart';
 import 'package:food_truck_mobile/widget/components/clickable_label.dart';
 import 'package:food_truck_mobile/widget/components/input_field.dart';
@@ -11,9 +12,9 @@ import 'package:food_truck_mobile/widget/dividers/section_divider.dart';
 import 'package:food_truck_mobile/widget/dividers/section_header_lr.dart';
 import 'package:food_truck_mobile/widget/text.dart';
 import 'package:provider/provider.dart';
-import '../helper/constants.dart';
-import '../widget/components/bottom_navigation.dart';
-import '../widget/components/button.dart';
+import '../../helper/constants.dart';
+import '../../widget/components/bottom_navigation.dart';
+import '../../widget/components/button.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 /// The [AccountScreen] of this app, it has two screens: User Information
@@ -258,12 +259,10 @@ class _AccountScreenState extends State<AccountScreen> {
                         padding: const EdgeInsets.symmetric(horizontal: 40.0),
                         takeLeastSpace: true,
                         onPressed: () {
-                          setState(() {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => EditProfileScreen(
-                                      userModel: userData,
-                                    )));
-                          });
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => EditProfileScreen(
+                                    userModel: userData,
+                                  )));
                         },
                       ),
                     ),
@@ -275,7 +274,17 @@ class _AccountScreenState extends State<AccountScreen> {
                       info: userData.phoneNumber,
                     ),
                     ProfileRow(icon: Icons.mail_outline, info: userData.email),
-                    ProfileRow(icon: Icons.pin_drop, info: userData.address),
+                    ProfileRow(
+                      icon: Icons.pin_drop,
+                      info: userData.address,
+                      onPressed: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => SetAddressMapScreen(
+                                  auth: auth,
+                                  userModel: userData,
+                                )));
+                      },
+                    ),
                     const SectionDivider(
                       padding: EdgeInsets.only(
                           left: 15.0, right: 15.0, bottom: 25.0),

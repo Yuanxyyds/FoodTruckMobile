@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:food_truck_mobile/firebase/restaurant_manager.dart';
+import 'package:food_truck_mobile/providers/firebase/restaurant_manager.dart';
 import 'package:food_truck_mobile/models/food_model.dart';
 import 'package:food_truck_mobile/models/restaurant_model.dart';
 import 'package:food_truck_mobile/widget/components/home_restaurant_button.dart';
@@ -137,34 +137,28 @@ class _SearchScreenState extends State<SearchScreen> {
   /// The Component of Search State
   Widget _buildSearchResults() {
     if (_searchResults.isEmpty) {
-      return const Expanded(
-        child: Center(
-          child: TextHeadlineSmall(
-            text: 'No result found',
-          ),
+      return const Center(
+        child: TextHeadlineSmall(
+          text: 'No result found',
         ),
       );
     }
 
-    return Column(children: [
-      Expanded(
-        child: ListView.builder(
-          itemCount: _searchResults.length * 2 - 1 <= 0
-              ? 0
-              : _searchResults.length * 2 - 1,
-          itemBuilder: (context, index) {
-            bool isEven = index % 2 == 0;
-            if (isEven) {
-              final restaurant = _searchResults[index ~/ 2];
-              return SearchRestaurantButton(
-                restaurantModel: restaurant,
-              );
-            } else {
-              return const SectionDivider();
-            }
-          },
-        ),
-      ),
-    ]);
+    return ListView.builder(
+      itemCount: _searchResults.length * 2 - 1 <= 0
+          ? 0
+          : _searchResults.length * 2 - 1,
+      itemBuilder: (context, index) {
+        bool isEven = index % 2 == 0;
+        if (isEven) {
+          final restaurant = _searchResults[index ~/ 2];
+          return SearchRestaurantButton(
+            restaurantModel: restaurant,
+          );
+        } else {
+          return const SectionDivider();
+        }
+      },
+    );
   }
 }

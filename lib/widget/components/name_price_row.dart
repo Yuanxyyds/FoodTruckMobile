@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:food_truck_mobile/widget/text.dart';
 
-class CheckoutItem extends StatelessWidget {
+class NamePriceRow extends StatelessWidget {
   final String name;
   final double price;
   final bool isBold;
 
-  const CheckoutItem(
+  const NamePriceRow(
       {Key? key, required this.name, required this.price, this.isBold = false})
       : super(key: key);
 
