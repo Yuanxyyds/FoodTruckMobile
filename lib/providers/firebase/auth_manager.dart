@@ -190,6 +190,7 @@ class AuthManager extends ChangeNotifier {
     }
   }
 
+
   /// Return the Current User's information
   Future<UserModel?> getUserInfo() async {
     try {

@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:food_truck_mobile/firebase/restaurant_manager.dart';
+import 'package:food_truck_mobile/providers/firebase/restaurant_manager.dart';
 import 'package:food_truck_mobile/models/restaurant_model.dart';
 import 'package:food_truck_mobile/widget/components/home_restaurant_button.dart';
 import 'package:food_truck_mobile/widget/dividers/section_header_tb.dart';
 import 'package:food_truck_mobile/widget/components/bottom_navigation.dart';
 import 'package:food_truck_mobile/widget/text.dart';
-import 'map_screen.dart';
 
 /// The [HomeScreen] of the app
 /// TODO: Get Restaurant from FireStore
@@ -21,16 +20,6 @@ class HomeScreen extends StatelessWidget {
         title: const TextHeadlineSmall(
           text: 'Home',
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.map),
-        onPressed: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (BuildContext context) => const MapScreen(),
-            ),
-          );
-        },
       ),
       bottomNavigationBar: const BottomNavigation(
         currentIndex: 0,

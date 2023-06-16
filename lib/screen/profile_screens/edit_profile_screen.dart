@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:food_truck_mobile/screen/profile_screens/set_address_map_screen.dart';
 import 'package:food_truck_mobile/widget/components/button.dart';
 import 'package:provider/provider.dart';
-import 'package:food_truck_mobile/firebase/auth_manager.dart';
+import 'package:food_truck_mobile/providers/firebase/auth_manager.dart';
 import 'package:food_truck_mobile/models/user_model.dart';
 import 'package:food_truck_mobile/widget/components/input_field.dart';
 
@@ -25,11 +26,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   final TextEditingController _phoneNumberEditingController =
       TextEditingController();
 
-  final TextEditingController _addressEditingController =
-      TextEditingController();
-
   final _emailFocusNode = FocusNode();
-  final _addressFocusNode = FocusNode();
   final _nameFocusNode = FocusNode();
   final _phoneNumberFocusNode = FocusNode();
 
@@ -38,9 +35,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     _nameEditingController.dispose();
     _emailEditingController.dispose();
     _phoneNumberEditingController.dispose();
-    _addressEditingController.dispose();
     _emailFocusNode.dispose();
-    _addressFocusNode.dispose();
     _nameFocusNode.dispose();
     _phoneNumberFocusNode.dispose();
     super.dispose();
@@ -52,7 +47,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     _nameEditingController.text = widget.userModel.name;
     _emailEditingController.text = widget.userModel.email;
     _phoneNumberEditingController.text = widget.userModel.phoneNumber;
-    _addressEditingController.text = widget.userModel.address;
     return Scaffold(
       appBar: AppBar(
         title: const Text('My Account'),
@@ -61,7 +55,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         onTap: () {
           _emailFocusNode.unfocus();
           _nameFocusNode.unfocus();
-          _addressFocusNode.unfocus();
           _phoneNumberFocusNode.unfocus();
         },
         child: Padding(
@@ -87,22 +80,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   );
                 },
                 prefixIcon: const Icon(Icons.person),
-                borderRadius: 32,
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              InputField(
-                focusNode: _addressFocusNode,
-                controller: _addressEditingController,
-                onTap: () {
-                  _addressEditingController.selection = TextSelection(
-                    baseOffset: 0,
-                    extentOffset: _addressEditingController.value.text.length,
-                  );
-                },
-                labelText: 'Address',
-                prefixIcon: const Icon(Icons.location_on),
                 borderRadius: 32,
               ),
               const SizedBox(
@@ -149,12 +126,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 onPressed: () async {
                   if (!_checkFieldIsEmpty()) {
                     widget.userModel.name = _nameEditingController.text;
-                    widget.userModel.address = _addressEditingController.text;
                     widget.userModel.email = _emailEditingController.text;
                     widget.userModel.phoneNumber =
                         _phoneNumberEditingController.text;
-                    if (await auth.updateEmail(widget.userModel.email)){
-                      if (await auth.updateUser(widget.userModel)){
+                    if (await auth.updateEmail(widget.userModel.email)) {
+                      if (await auth.updateUser(widget.userModel)) {
                         Navigator.of(context).pop();
                       }
                     }
@@ -171,7 +147,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   /// Check if all input field is empty
   bool _checkFieldIsEmpty() {
     if (_nameEditingController.text.isEmpty ||
-        _addressEditingController.text.isEmpty ||
         _emailEditingController.text.isEmpty ||
         _phoneNumberEditingController.text.isEmpty) {
       Fluttertoast.showToast(

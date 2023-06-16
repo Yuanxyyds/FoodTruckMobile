@@ -41,7 +41,7 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
   Widget build(BuildContext context) {
     Color removeColor = count == 1 ? Colors.grey : Colors.black;
     ShoppingCartProvider shoppingCartProvider =
-    context.watch<ShoppingCartProvider>();
+    context.read<ShoppingCartProvider>();
 
     return Scaffold(
         appBar: AppBar(
@@ -198,6 +198,7 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                               foodName: widget.foodModel.name,
                               foodId: widget.foodModel.id!,
                               singleItemPrice: singleItemTotal,
+                              toppings: selectedToppings,
                               quantity: count);
                           shoppingCartProvider.addOrderItem(orderItemModel);
                         },

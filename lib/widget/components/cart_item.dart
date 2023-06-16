@@ -23,11 +23,22 @@ class CartItem extends StatelessWidget {
       children: [
         Row(
           children: [
-            Expanded(
-                child: TextTitleMedium(
+            TextTitleMedium(
               text: orderItemModel.foodName,
               isBold: true,
-            )),
+            ),
+            Expanded(
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: IconButton(
+                  iconSize: 20,
+                  onPressed: () {
+                    shoppingCartProvider.removeOrderItem(orderItemModel);
+                  },
+                  icon: const Icon(Icons.remove_circle),
+                ),
+              ),
+            ),
             TextTitleMedium(
               text:
                   '\$ ${(orderItemModel.singleItemPrice * orderItemModel.quantity).toStringAsFixed(2)}',
@@ -35,15 +46,16 @@ class CartItem extends StatelessWidget {
             ),
           ],
         ),
+        ..._getToppingRows(),
         const SizedBox(
-          height: 20.0,
+          height: 8.0,
         ),
         Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             const Expanded(child: TextTitleMedium(text: "Quantity")),
             Container(
-              height: 50.0,
+              height: 40.0,
               width: 120.0,
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -87,5 +99,18 @@ class CartItem extends StatelessWidget {
         const SectionDivider()
       ],
     );
+  }
+
+  List<Widget> _getToppingRows() {
+    List<Widget> toppingRows = <Widget>[];
+    for (var topping in orderItemModel.toppings) {
+      toppingRows.add(Align(
+          alignment: Alignment.centerLeft,
+          child: TextTitleSmall(
+            text: '\u2022 $topping',
+            padding: const EdgeInsets.only(left: 12),
+          )));
+    }
+    return toppingRows;
   }
 }

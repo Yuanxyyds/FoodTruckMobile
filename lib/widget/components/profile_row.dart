@@ -7,13 +7,14 @@ class ProfileRow extends StatelessWidget {
   final IconData icon;
   final String info;
   final bool secondary;
+  final VoidCallback? onPressed;
 
   const ProfileRow(
-      {required this.icon,
+      {super.key,
+      required this.icon,
       required this.info,
       this.secondary = false,
-      Key? key})
-      : super(key: key);
+      this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -47,10 +48,11 @@ class ProfileRow extends StatelessWidget {
                 shape: BoxShape.circle,
                 color: Colors.grey,
               ),
-              child: const Center(
-                child: Icon(
-                  Icons.arrow_forward_ios,
+              child: Center(
+                child: IconButton(
+                  icon: const Icon(Icons.arrow_forward_ios),
                   color: Colors.white,
+                  onPressed: onPressed,
                 ),
               ),
             ),

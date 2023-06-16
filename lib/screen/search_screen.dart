@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:food_truck_mobile/firebase/restaurant_manager.dart';
+import 'package:food_truck_mobile/providers/firebase/restaurant_manager.dart';
 import 'package:food_truck_mobile/models/food_model.dart';
 import 'package:food_truck_mobile/models/restaurant_model.dart';
 import 'package:food_truck_mobile/widget/components/home_restaurant_button.dart';

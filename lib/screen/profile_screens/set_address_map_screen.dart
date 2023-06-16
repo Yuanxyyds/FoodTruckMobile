@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:food_truck_mobile/providers/firebase/auth_manager.dart';
 import 'package:food_truck_mobile/helper/constants.dart';
+import 'package:food_truck_mobile/models/user_model.dart';
 import 'package:food_truck_mobile/widget/components/button.dart';
 import 'package:food_truck_mobile/widget/components/input_field.dart';
 import 'package:food_truck_mobile/widget/dialogs/location_setting_dialog.dart';
@@ -7,19 +9,22 @@ import 'package:food_truck_mobile/widget/map.dart';
 import 'package:food_truck_mobile/widget/text.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
-import '../providers/user_location_provider.dart';
+import 'package:food_truck_mobile/providers/user_location_provider.dart';
 
-/// A [MapScreen] that shows the location of current User
-class MapScreen extends StatefulWidget {
-  const MapScreen({
-    super.key,
+/// A [SetAddressMapScreen] that shows the location of current User
+class SetAddressMapScreen extends StatefulWidget {
+  SetAddressMapScreen({
+    super.key, required this.auth, required this.userModel,
   });
 
+  final AuthManager auth;
+  UserModel userModel;
+
   @override
-  State<MapScreen> createState() => _MapScreenState();
+  State<SetAddressMapScreen> createState() => _SetAddressMapScreenState();
 }
 
-class _MapScreenState extends State<MapScreen> {
+class _SetAddressMapScreenState extends State<SetAddressMapScreen> {
   final TextEditingController _addressController = TextEditingController();
   bool _isRequesting = true;
   bool _isSearching = false;
@@ -69,7 +74,7 @@ class _MapScreenState extends State<MapScreen> {
             ),
             Center(
               child: TextBodySmall(
-                text: 'help us create a circle for you.',
+                text: 'help us locate you.',
                 color: Theme.of(context).primaryColor,
                 padding: EdgeInsets.zero,
               ),
@@ -139,10 +144,14 @@ class _MapScreenState extends State<MapScreen> {
               height: 16,
             ),
             Button(
-              text: 'Next',
+              text: 'Update',
               textColor: Constants.whiteColor,
               takeLeastSpace: false,
-              onPressed: () {},
+              onPressed: () {
+                widget.userModel.address = _addressController.text;
+                widget.auth.updateUser(widget.userModel);
+                Navigator.of(context).pop();
+              },
             ),
           ],
         ),
@@ -227,9 +236,13 @@ class _MapScreenState extends State<MapScreen> {
                   height: 16,
                 ),
                 Button(
-                  text: 'Next',
+                  text: 'Update',
                   textColor: Constants.whiteColor,
-                  onPressed: () {},
+                  onPressed: () {
+                    widget.userModel.address = _addressController.text;
+                    widget.auth.updateUser(widget.userModel);
+                    Navigator.of(context).pop();
+                  },
                 ),
               ],
             )),

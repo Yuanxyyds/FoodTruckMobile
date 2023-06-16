@@ -1,12 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:food_truck_mobile/firebase/section_manager.dart';
 import 'package:food_truck_mobile/models/restaurant_model.dart';
-import 'package:food_truck_mobile/models/section_model.dart';
-
-import '../models/food_model.dart';
-import 'food_manager.dart';
 
 /// The main RestaurantManager instance (Provider) that manages the restaurant
 /// functions
