@@ -50,13 +50,13 @@ class CheckoutScreen extends StatelessWidget {
                 primaryLine: "Delivery in 35 min to Home",
                 secondaryLine: "Your home address here"),
             const SectionDivider(),
-            const Row(
+            Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+                    children: const [
                       TextTitleMedium(
                         text: "No contact delivery",
                         isBold: true,
@@ -66,14 +66,14 @@ class CheckoutScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                Icon(Icons.arrow_forward_ios),
+                const Icon(Icons.arrow_forward_ios),
               ],
             ),
             const SectionHeaderTB(text: "Selected Items"),
             FoodButton(foodModel: food),
             const SectionDivider(),
-            const Row(
-              children: [
+            Row(
+              children: const [
                 Icon(Icons.add),
                 TextTitleMedium(text: "Add more items"),
               ],

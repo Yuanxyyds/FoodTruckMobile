@@ -40,9 +40,9 @@ class CheckoutRow extends StatelessWidget {
                     text: secondaryLine, padding: EdgeInsets.zero)),
           ],
         )),
-        const Column(
+        Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
+          children: const [
             SizedBox(
               height: 50.0,
               child: Icon(Icons.arrow_forward_ios),
