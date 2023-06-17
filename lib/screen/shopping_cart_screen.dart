@@ -26,20 +26,6 @@ class ShoppingCart extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           title: const Text("Shopping cart"),
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.of(context).push(
-                PageRouteBuilder(
-                  pageBuilder: (context, animation, secondaryAnimation) =>
-                      RestaurantMenuScreen(
-                    restaurantModel: restaurantModel,
-                  ),
-                  transitionDuration: Duration.zero,
-                ),
-              );
-            },
-          ),
         ),
         body: Padding(
             padding:
@@ -81,7 +67,7 @@ class ShoppingCart extends StatelessWidget {
                     backgroundColor: Constants.primaryColor,
                     takeLeastSpace: true,
                     onPressed: () {
-                      Navigator.of(context).push(
+                      Navigator.of(context).pushReplacement(
                         PageRouteBuilder(
                           pageBuilder:
                               (context, animation, secondaryAnimation) =>
