@@ -2,6 +2,7 @@
 class OrderItemModel {
   final String foodName;
   final String foodId;
+  final String foodUrl;
   final List<String> toppings;
   final double singleItemPrice;
   int quantity;
@@ -11,7 +12,6 @@ class OrderItemModel {
       required this.foodId,
       this.toppings = const <String>[],
       required this.singleItemPrice,
-      required this.quantity});
-
-
+      required this.quantity,
+      required this.foodUrl});
 }

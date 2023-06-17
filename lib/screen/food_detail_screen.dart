@@ -195,6 +195,7 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                         onPressed: () {
                           Navigator.of(context).pop();
                           OrderItemModel orderItemModel = OrderItemModel(
+                              foodUrl: widget.foodModel.foodUrl,
                               foodName: widget.foodModel.name,
                               foodId: widget.foodModel.id!,
                               singleItemPrice: singleItemTotal,

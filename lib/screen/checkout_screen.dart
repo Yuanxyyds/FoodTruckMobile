@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:food_truck_mobile/screen/restaurant_menu_screen.dart';
 import 'package:food_truck_mobile/screen/shopping_cart_screen.dart';
+import 'package:food_truck_mobile/widget/components/checkout_food_item.dart';
 import 'package:food_truck_mobile/widget/components/checkout_row.dart';
 import 'package:food_truck_mobile/widget/components/food_button.dart';
 import 'package:provider/provider.dart';
@@ -65,13 +66,13 @@ class CheckoutScreen extends StatelessWidget {
                       primaryLine: "Delivery in 35 min to Home",
                       secondaryLine: "Your home address here"),
                   const SectionDivider(),
-                  const Row(
+                  Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
+                          children: const [
                             TextTitleMedium(
                               text: "No contact delivery",
                               isBold: true,
@@ -99,8 +100,8 @@ class CheckoutScreen extends StatelessWidget {
                         ),
                       );
                     },
-                    child: const Row(
-                      children: [
+                    child: Row(
+                      children: const [
                         Icon(Icons.add),
                         TextTitleMedium(text: "Add more items"),
                       ],
@@ -187,18 +188,9 @@ class CheckoutScreen extends StatelessWidget {
   Future<List<Widget>> _getContent(
       ShoppingCartProvider shoppingCartProvider) async {
     List<Widget> content = [];
-    FoodManager foodManager = FoodManager();
-
     List<OrderItemModel> cartItems = shoppingCartProvider.orderItems;
-    List<FoodModel>? foods = await foodManager
-        .getFoodByRestaurant(shoppingCartProvider.restaurantId);
-
-    List<FoodModel> selectedFood = foods!
-        .where((item) => cartItems.any((element) => element.foodId == item.id))
-        .toList();
-
-    for (var foodModel in selectedFood) {
-      content.add(FoodButton(foodModel: foodModel));
+    for (var orderItemModel in cartItems) {
+      content.add(CheckoutFoodItem(orderItemModel: orderItemModel));
     }
     return content;
   }
