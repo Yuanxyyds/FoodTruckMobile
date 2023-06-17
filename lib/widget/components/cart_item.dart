@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:food_truck_mobile/models/order_item_model.dart';
-import 'package:food_truck_mobile/providers/shoping_cart_provider.dart';
+import 'package:food_truck_mobile/providers/shopping_cart_provider.dart';
 import 'package:food_truck_mobile/widget/dividers/section_divider.dart';
 import 'package:food_truck_mobile/widget/text.dart';
 

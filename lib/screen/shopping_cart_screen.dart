@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:food_truck_mobile/models/order_item_model.dart';
-import 'package:food_truck_mobile/providers/shoping_cart_provider.dart';
+import 'package:food_truck_mobile/models/restaurant_model.dart';
+import 'package:food_truck_mobile/providers/shopping_cart_provider.dart';
+import 'package:food_truck_mobile/screen/restaurant_menu_screen.dart';
 import 'package:food_truck_mobile/widget/components/button.dart';
 import 'package:food_truck_mobile/widget/components/cart_item.dart';
 import 'package:food_truck_mobile/widget/components/name_price_row.dart';
@@ -9,10 +11,13 @@ import 'package:food_truck_mobile/widget/text.dart';
 import 'package:provider/provider.dart';
 
 import '../helper/constants.dart';
+import 'checkout_screen.dart';
 
 /// TODO: Add OrderItem Model in the future
 class ShoppingCart extends StatelessWidget {
-  const ShoppingCart({super.key});
+  final RestaurantModel restaurantModel;
+
+  const ShoppingCart({super.key, required this.restaurantModel});
 
   @override
   Widget build(BuildContext context) {
@@ -21,6 +26,20 @@ class ShoppingCart extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           title: const Text("Shopping cart"),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.of(context).push(
+                PageRouteBuilder(
+                  pageBuilder: (context, animation, secondaryAnimation) =>
+                      RestaurantMenuScreen(
+                    restaurantModel: restaurantModel,
+                  ),
+                  transitionDuration: Duration.zero,
+                ),
+              );
+            },
+          ),
         ),
         body: Padding(
             padding:
@@ -61,7 +80,18 @@ class ShoppingCart extends StatelessWidget {
                     textColor: Colors.white,
                     backgroundColor: Constants.primaryColor,
                     takeLeastSpace: true,
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        PageRouteBuilder(
+                          pageBuilder:
+                              (context, animation, secondaryAnimation) =>
+                                  CheckoutScreen(
+                            restaurantModel: restaurantModel,
+                          ),
+                          transitionDuration: Duration.zero,
+                        ),
+                      );
+                    },
                   ),
                 ))
               ],
