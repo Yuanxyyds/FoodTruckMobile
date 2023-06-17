@@ -102,7 +102,9 @@ class _AccountScreenState extends State<AccountScreen> {
                 textColor: Constants.whiteColor,
                 icon: GoogleIcon.google,
                 takeLeastSpace: true,
-                onPressed: () {},
+                onPressed: () async {
+                  await auth.signInWithGoogle();
+                },
               ),
               const SizedBox(height: 8),
               Button(
@@ -157,17 +159,17 @@ class _AccountScreenState extends State<AccountScreen> {
                   text: 'Finish',
                   textColor: Constants.whiteColor,
                   takeLeastSpace: true,
-                  onPressed: () {
-                    setState(() {
-                      if (!_checkFieldIsEmpty(_inputPassword)) {
-                        auth.signInWithEmailAndPassword(
-                            email: _inputEmail.text,
-                            password: _inputPassword.text);
-                        _emailMode = !_emailMode;
+                  onPressed: () async {
+                    if (!_checkFieldIsEmpty(_inputPassword)) {
+                      await auth.signInWithEmailAndPassword(
+                          email: _inputEmail.text,
+                          password: _inputPassword.text);
+                      _emailMode = !_emailMode;
+                      setState(() {
                         _inputEmail.clear();
                         _inputPassword.clear();
-                      }
-                    });
+                      });
+                    }
                   },
                 ),
               const SizedBox(height: 8),
@@ -239,7 +241,7 @@ class _AccountScreenState extends State<AccountScreen> {
                     Center(
                       child: CircleAvatar(
                         radius: 60,
-                        backgroundImage: AssetImage(
+                        backgroundImage: NetworkImage(
                           userData.avatar,
                         ),
                       ),

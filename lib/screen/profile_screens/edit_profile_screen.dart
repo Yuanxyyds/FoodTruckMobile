@@ -60,10 +60,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
             child: ListView(children: [
-              const Center(
+              Center(
                 child: CircleAvatar(
                   radius: 60,
-                  backgroundImage: AssetImage('images/UnknownUser.jpg'),
+                  backgroundImage: NetworkImage(widget.userModel.avatar),
                 ),
               ),
               const SizedBox(

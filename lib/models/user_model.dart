@@ -1,3 +1,5 @@
+import 'package:food_truck_mobile/helper/constants.dart';
+
 /// The [UserModel]
 class UserModel {
   String? id;
@@ -13,7 +15,7 @@ class UserModel {
     required this.name,
     this.phoneNumber = 'Click to set your phone number',
     required this.email,
-    this.avatar = 'images/UnknownUser.jpg',
+    this.avatar = Constants.defaultUserAvatar,
     this.address = 'Click to set your address',
     this.accountBalance = 0,
   });
