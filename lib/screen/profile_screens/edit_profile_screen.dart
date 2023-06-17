@@ -27,6 +27,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   final TextEditingController _phoneNumberEditingController =
       TextEditingController();
 
+  final ImageProviderClass imageProvider = ImageProviderClass();
+
+  bool _isPreview = false;
+
   final _emailFocusNode = FocusNode();
   final _nameFocusNode = FocusNode();
   final _phoneNumberFocusNode = FocusNode();
@@ -63,14 +67,27 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             child: ListView(children: [
               Center(
                 child: Stack(alignment: Alignment.bottomRight, children: [
-                  CircleAvatar(
-                    radius: 60,
-                    backgroundImage: NetworkImage(widget.userModel.avatar),
-                  ),
+                  if (!_isPreview)
+                    CircleAvatar(
+                      radius: 60,
+                      backgroundImage: NetworkImage(widget.userModel.avatar),
+                    ),
+                  if (_isPreview)
+                    CircleAvatar(
+                      radius: 60,
+                      backgroundImage: FileImage(imageProvider.croppedFile!),
+                    ),
                   IconButton(
                     onPressed: () async {
-                      ImageProviderClass imageProvider = ImageProviderClass();
                       await imageProvider.pickImage(ImageSource.gallery);
+                      if (imageProvider.imageFile != null) {
+                        await imageProvider.cropImage();
+                        if (imageProvider.croppedFile != null) {
+                          setState(() {
+                            _isPreview = true;
+                          });
+                        }
+                      }
                     },
                     icon: const Icon(Icons.edit),
                     iconSize: 40,
@@ -142,8 +159,16 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     widget.userModel.phoneNumber =
                         _phoneNumberEditingController.text;
                     if (await auth.updateEmail(widget.userModel.email)) {
+                      if (_isPreview) {
+                        String url = await imageProvider
+                                .uploadImageToFirebaseStorage() ??
+                            '';
+                        if (url.isNotEmpty){
+                          widget.userModel.avatar = url;
+                        }
+                      }
                       if (await auth.updateUser(widget.userModel)) {
-                        Navigator.of(context).pop();
+                        if (context.mounted) Navigator.of(context).pop();
                       }
                     }
                   }

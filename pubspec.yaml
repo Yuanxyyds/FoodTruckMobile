@@ -49,6 +49,8 @@ dependencies:
   permission_handler: ^10.3.0
   image_picker: ^0.8.9
   device_info: ^2.0.3
+  image_cropper: ^4.0.1
+  firebase_storage: ^11.2.3
 
 dev_dependencies:
   flutter_test:
