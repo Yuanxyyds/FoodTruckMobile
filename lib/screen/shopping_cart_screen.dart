@@ -54,12 +54,15 @@ class ShoppingCart extends StatelessWidget {
             child: Row(
               children: [
                 Expanded(
-                    child: Button(
-                  text: "Checkout",
-                  textColor: Colors.white,
-                  backgroundColor: Constants.primaryColor,
-                  takeLeastSpace: true,
-                  onPressed: () {},
+                    child: SizedBox(
+                  height: 45.0,
+                  child: Button(
+                    text: "Checkout",
+                    textColor: Colors.white,
+                    backgroundColor: Constants.primaryColor,
+                    takeLeastSpace: true,
+                    onPressed: () {},
+                  ),
                 ))
               ],
             ),

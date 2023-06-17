@@ -76,6 +76,7 @@ flutter:
     - images/UnknownUser.jpg
     - images/HomeDecoration.png
     - images/DefaultRestaurantImage.jpeg
+    - images/CheckoutDecoration.jpg
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
