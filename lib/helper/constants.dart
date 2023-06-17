@@ -20,5 +20,7 @@ class Constants {
   /// The Navigation Shadow Color
   static const navigationShadowColor = Color(0xFFC1CEBD);
 
+  static const String defaultUserAvatar = 'https://firebasestorage.googleapis.com/v0/b/foodtruckmobile-fbd40.appspot.com/o/UnknownUser.jpg?alt=media&token=52914221-4abd-46d8-929e-0d7bbb0f710c';
+
 
 }
