@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:food_truck_mobile/models/food_model.dart';
 import 'package:food_truck_mobile/models/order_item_model.dart';
-import 'package:food_truck_mobile/providers/shoping_cart_provider.dart';
+import 'package:food_truck_mobile/providers/shopping_cart_provider.dart';
 import 'package:food_truck_mobile/widget/components/add_topping.dart';
 import 'package:food_truck_mobile/widget/components/button.dart';
 import 'package:food_truck_mobile/widget/text.dart';
@@ -41,7 +41,7 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
   Widget build(BuildContext context) {
     Color removeColor = count == 1 ? Colors.grey : Colors.black;
     ShoppingCartProvider shoppingCartProvider =
-    context.read<ShoppingCartProvider>();
+        context.read<ShoppingCartProvider>();
 
     return Scaffold(
         appBar: AppBar(
@@ -94,7 +94,7 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                         alignment: Alignment.topRight,
                         child: TextTitleMedium(
                           text:
-                          '\$ ${widget.foodModel.price.toStringAsFixed(2)}',
+                              '\$ ${widget.foodModel.price.toStringAsFixed(2)}',
                           isBold: true,
                           padding: EdgeInsets.zero,
                         )),
