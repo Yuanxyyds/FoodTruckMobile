@@ -47,6 +47,8 @@ dependencies:
   google_maps_flutter: ^2.2.8
   location: ^4.4.0
   permission_handler: ^10.3.0
+  image_picker: ^0.8.9
+  device_info: ^2.0.3
 
 dev_dependencies:
   flutter_test:
