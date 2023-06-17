@@ -77,21 +77,24 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       radius: 60,
                       backgroundImage: FileImage(imageProvider.croppedFile!),
                     ),
-                  IconButton(
-                    onPressed: () async {
-                      await imageProvider.pickImage(ImageSource.gallery);
-                      if (imageProvider.imageFile != null) {
-                        await imageProvider.cropImage();
-                        if (imageProvider.croppedFile != null) {
-                          setState(() {
-                            _isPreview = true;
-                          });
+                  CircleAvatar(
+                    radius: 20,
+                    child: IconButton(
+                      onPressed: () async {
+                        await imageProvider.pickImage(ImageSource.gallery);
+                        if (imageProvider.imageFile != null) {
+                          await imageProvider.cropImage();
+                          if (imageProvider.croppedFile != null) {
+                            setState(() {
+                              _isPreview = true;
+                            });
+                          }
                         }
-                      }
-                    },
-                    icon: const Icon(Icons.edit),
-                    iconSize: 40,
-                    color: Theme.of(context).primaryColor,
+                      },
+                      icon: const Icon(Icons.edit),
+                      iconSize: 25,
+                      color: Theme.of(context).primaryColor,
+                    ),
                   )
                 ]),
               ),
