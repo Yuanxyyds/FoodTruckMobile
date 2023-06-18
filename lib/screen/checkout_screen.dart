@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:food_truck_mobile/screen/restaurant_menu_screen.dart';
 import 'package:food_truck_mobile/screen/shopping_cart_screen.dart';
+import 'package:food_truck_mobile/screen/thank_you_screen.dart';
 import 'package:food_truck_mobile/widget/components/checkout_food_item.dart';
 import 'package:food_truck_mobile/widget/components/checkout_row.dart';
 import 'package:food_truck_mobile/widget/components/food_button.dart';
@@ -175,7 +176,15 @@ class CheckoutScreen extends StatelessWidget {
                   textColor: Colors.white,
                   backgroundColor: Constants.primaryColor,
                   takeLeastSpace: true,
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      PageRouteBuilder(
+                        pageBuilder: (context, animation, secondaryAnimation) =>
+                            const ThankYouScreen(),
+                        transitionDuration: Duration.zero,
+                      ),
+                    );
+                  },
                 ),
               ))
             ],
