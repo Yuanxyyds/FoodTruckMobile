@@ -18,6 +18,7 @@ class ShoppingCartProvider extends ChangeNotifier {
   }
 
   void clearOrderItems() {
+     restaurantId = '';
     _orderItems.clear();
   }
 

@@ -22,7 +22,7 @@ class AuthManager extends ChangeNotifier {
 
   Stream<User?> get authStateChanges => _firebaseAuth.authStateChanges();
 
-  final GoogleSignIn _googleSignIn = GoogleSignIn();
+  final GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['profile', 'email']);
 
   /// Sign in with Google
   Future<void> signInWithGoogle() async {
@@ -60,6 +60,7 @@ class AuthManager extends ChangeNotifier {
         );
       }
     } catch (e) {
+      print(e);
       String input = e.toString();
       String substring = input.substring(input.indexOf("]") + 1);
       Fluttertoast.showToast(

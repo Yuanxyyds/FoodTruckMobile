@@ -8,7 +8,6 @@ import 'package:food_truck_mobile/providers/shopping_cart_provider.dart';
 import 'package:food_truck_mobile/providers/user_location_provider.dart';
 import 'package:food_truck_mobile/screen/home_screen.dart';
 import 'package:provider/provider.dart';
-
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 Future main() async {
