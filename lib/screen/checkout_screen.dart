@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:food_truck_mobile/screen/restaurant_menu_screen.dart';
 import 'package:food_truck_mobile/screen/shopping_cart_screen.dart';
 import 'package:food_truck_mobile/screen/thank_you_screen.dart';
 import 'package:food_truck_mobile/widget/components/checkout_food_item.dart';
 import 'package:food_truck_mobile/widget/components/checkout_row.dart';
-import 'package:food_truck_mobile/widget/components/food_button.dart';
+import 'package:food_truck_mobile/widget/components/name_price_row.dart';
 import 'package:provider/provider.dart';
 
 import '../helper/constants.dart';
-import '../models/food_model.dart';
 import '../models/order_item_model.dart';
 import '../models/restaurant_model.dart';
-import '../providers/firebase/food_manager.dart';
 import '../providers/shopping_cart_provider.dart';
 import '../widget/components/button.dart';
 import '../widget/dividers/section_divider.dart';
@@ -32,20 +29,6 @@ class CheckoutScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Checkout"),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.of(context).push(
-              PageRouteBuilder(
-                pageBuilder: (context, animation, secondaryAnimation) =>
-                    RestaurantMenuScreen(
-                  restaurantModel: restaurantModel,
-                ),
-                transitionDuration: Duration.zero,
-              ),
-            );
-          },
-        ),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
@@ -61,6 +44,29 @@ class CheckoutScreen extends StatelessWidget {
                     isBold: true,
                   ),
                   TextTitleMedium(text: restaurantModel.name),
+                  const SectionHeaderTB(text: "Selected Items"),
+                  ...snapshot.data!,
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Row(
+                      children: const [
+                        Icon(Icons.add),
+                        TextTitleMedium(text: "Add more items"),
+                      ],
+                    ),
+                  ),
+                  const SectionHeaderTB(text: "Subtotal"),
+                  NamePriceRow(
+                      name: "Subtotal",
+                      price: shoppingCartProvider.getTotalCost()),
+                  const NamePriceRow(name: "Delivery costs", price: 0.00),
+                  NamePriceRow(
+                    name: "Total",
+                    price: shoppingCartProvider.getTotalCost(),
+                    isBold: true,
+                  ),
                   const SectionHeaderTB(text: "Delivery method and time"),
                   const CheckoutRow(
                       icon: Icons.delivery_dining,
@@ -83,30 +89,8 @@ class CheckoutScreen extends StatelessWidget {
                           ],
                         ),
                       ),
-                      Icon(Icons.arrow_forward_ios),
+                      const Icon(Icons.arrow_forward_ios),
                     ],
-                  ),
-                  const SectionHeaderTB(text: "Selected Items"),
-                  ...snapshot.data!,
-                  const SectionDivider(),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).push(
-                        PageRouteBuilder(
-                          pageBuilder:
-                              (context, animation, secondaryAnimation) =>
-                                  RestaurantMenuScreen(
-                                      restaurantModel: restaurantModel),
-                          transitionDuration: Duration.zero,
-                        ),
-                      );
-                    },
-                    child: Row(
-                      children: const [
-                        Icon(Icons.add),
-                        TextTitleMedium(text: "Add more items"),
-                      ],
-                    ),
                   ),
                   const SectionHeaderTB(text: "Payment Details"),
                   const CheckoutRow(
@@ -142,7 +126,7 @@ class CheckoutScreen extends StatelessWidget {
               Expanded(
                   child: GestureDetector(
                 onTap: () {
-                  Navigator.of(context).push(
+                  Navigator.of(context).pushReplacement(
                     PageRouteBuilder(
                       pageBuilder: (context, animation, secondaryAnimation) =>
                           ShoppingCart(
@@ -172,12 +156,14 @@ class CheckoutScreen extends StatelessWidget {
                   child: SizedBox(
                 height: 45.0,
                 child: Button(
-                  text: "Pay \$10.99",
+                  text: "Pay \$${shoppingCartProvider.getTotalCost()}",
                   textColor: Colors.white,
                   backgroundColor: Constants.primaryColor,
                   takeLeastSpace: true,
                   onPressed: () {
-                    Navigator.of(context).push(
+                    /// TODO: IF SUCESS
+                    shoppingCartProvider.clearOrderItems();
+                    Navigator.of(context).pushReplacement(
                       PageRouteBuilder(
                         pageBuilder: (context, animation, secondaryAnimation) =>
                             const ThankYouScreen(),
@@ -200,6 +186,7 @@ class CheckoutScreen extends StatelessWidget {
     List<OrderItemModel> cartItems = shoppingCartProvider.orderItems;
     for (var orderItemModel in cartItems) {
       content.add(CheckoutFoodItem(orderItemModel: orderItemModel));
+      content.add(const SectionDivider());
     }
     return content;
   }

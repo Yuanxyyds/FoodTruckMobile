@@ -3,9 +3,15 @@
 <plist version="1.0">
 <dict>
     <key>NSLocationWhenInUseUsageDescription</key>
-    <string>Your message explaining why you need location access</string>
+    <string>Set your current location</string>
     <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-    <string>Your message explaining why you need location access</string>
+    <string>Set your current location</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>Access your photo</string>
+    <key>NSCameraUsageDescription</key>
+    <string>Access your camera</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>Access the audio</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>

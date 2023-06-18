@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:food_truck_mobile/screen/profile_screens/set_address_map_screen.dart';
+import 'package:food_truck_mobile/providers/image_provider.dart';
 import 'package:food_truck_mobile/widget/components/button.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:food_truck_mobile/providers/firebase/auth_manager.dart';
 import 'package:food_truck_mobile/models/user_model.dart';
@@ -25,6 +26,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   final TextEditingController _phoneNumberEditingController =
       TextEditingController();
+
+  final ImageProviderClass imageProvider = ImageProviderClass();
+
+  bool _isPreview = false;
 
   final _emailFocusNode = FocusNode();
   final _nameFocusNode = FocusNode();
@@ -61,10 +66,37 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
             child: ListView(children: [
               Center(
-                child: CircleAvatar(
-                  radius: 60,
-                  backgroundImage: NetworkImage(widget.userModel.avatar),
-                ),
+                child: Stack(alignment: Alignment.bottomRight, children: [
+                  if (!_isPreview)
+                    CircleAvatar(
+                      radius: 60,
+                      backgroundImage: NetworkImage(widget.userModel.avatar),
+                    ),
+                  if (_isPreview)
+                    CircleAvatar(
+                      radius: 60,
+                      backgroundImage: FileImage(imageProvider.croppedFile!),
+                    ),
+                  CircleAvatar(
+                    radius: 20,
+                    child: IconButton(
+                      onPressed: () async {
+                        await imageProvider.pickImage(ImageSource.gallery);
+                        if (imageProvider.imageFile != null) {
+                          await imageProvider.cropImage();
+                          if (imageProvider.croppedFile != null) {
+                            setState(() {
+                              _isPreview = true;
+                            });
+                          }
+                        }
+                      },
+                      icon: const Icon(Icons.edit),
+                      iconSize: 25,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  )
+                ]),
               ),
               const SizedBox(
                 height: 32,
@@ -130,8 +162,16 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     widget.userModel.phoneNumber =
                         _phoneNumberEditingController.text;
                     if (await auth.updateEmail(widget.userModel.email)) {
+                      if (_isPreview) {
+                        String url = await imageProvider
+                                .uploadImageToFirebaseStorage() ??
+                            '';
+                        if (url.isNotEmpty){
+                          widget.userModel.avatar = url;
+                        }
+                      }
                       if (await auth.updateUser(widget.userModel)) {
-                        Navigator.of(context).pop();
+                        if (context.mounted) Navigator.of(context).pop();
                       }
                     }
                   }

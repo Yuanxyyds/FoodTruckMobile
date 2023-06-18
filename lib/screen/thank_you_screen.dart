@@ -45,13 +45,8 @@ class ThankYouScreen extends StatelessWidget {
               Expanded(
                   child: GestureDetector(
                 onTap: () {
-                  Navigator.of(context).push(
-                    PageRouteBuilder(
-                      pageBuilder: (context, animation, secondaryAnimation) =>
-                          const HomeScreen(),
-                      transitionDuration: Duration.zero,
-                    ),
-                  );
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pop();
                 },
                 child: Container(
                     height: 45.0,

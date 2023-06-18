@@ -4,6 +4,7 @@ import 'package:food_truck_mobile/models/order_item_model.dart';
 class ShoppingCartProvider extends ChangeNotifier {
   final List<OrderItemModel> _orderItems = [];
   String restaurantId = '';
+
   List<OrderItemModel> get orderItems => _orderItems;
 
   void addOrderItem(OrderItemModel item) {
@@ -17,12 +18,13 @@ class ShoppingCartProvider extends ChangeNotifier {
   }
 
   void clearOrderItems() {
+     restaurantId = '';
     _orderItems.clear();
   }
 
-  double getTotalCost(){
+  double getTotalCost() {
     double totalPrice = 0;
-    for (OrderItemModel orderItem in orderItems){
+    for (OrderItemModel orderItem in orderItems) {
       totalPrice += orderItem.singleItemPrice * orderItem.quantity;
     }
     return totalPrice;

@@ -4,7 +4,7 @@ import 'package:food_truck_mobile/helper/constants.dart';
 import 'package:food_truck_mobile/models/user_model.dart';
 import 'package:food_truck_mobile/widget/components/button.dart';
 import 'package:food_truck_mobile/widget/components/input_field.dart';
-import 'package:food_truck_mobile/widget/dialogs/location_setting_dialog.dart';
+import 'package:food_truck_mobile/widget/dialogs/permission_setting_dialog.dart';
 import 'package:food_truck_mobile/widget/map.dart';
 import 'package:food_truck_mobile/widget/text.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
