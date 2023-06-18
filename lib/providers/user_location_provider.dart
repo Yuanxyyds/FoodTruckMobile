@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:food_truck_mobile/main.dart';
-import 'package:food_truck_mobile/widget/dialogs/location_setting_dialog.dart';
+import 'package:food_truck_mobile/widget/dialogs/permission_setting_dialog.dart';
 import 'package:location/location.dart' as loc;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:http/http.dart' as http;
@@ -93,7 +93,7 @@ class UserLocationProvider extends ChangeNotifier {
     showDialog(
       context: navigatorKey.currentState!.overlay!.context,
       builder: (BuildContext context) {
-        return const LocationSettingsDialog();
+        return const PermissionSettingsDialog(type: "Location",);
       },
     );
   }
