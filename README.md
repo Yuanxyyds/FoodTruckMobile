@@ -1,16 +1,5 @@
-# food_truck_mobile
+## CampusEats User Version 1.0
 
-A new Flutter project.
+This repository serves as an extension to the UofT FoodTruck Project, focusing on the user-end functionality. It contains various features such as account creation, account editing with the ability to upload images and utilize address autocomplete, viewing restaurants, managing the shopping cart, and firebase backend for communication with the seller-end.
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Although development for this version has been paused, you can access the latest and updated version of the CampusEats project at the following link: https://liustev6.ca/project-campusEats#campusEats2. This latest version incorporates enhancements to functionality and user interface, providing an improved experience for users.
